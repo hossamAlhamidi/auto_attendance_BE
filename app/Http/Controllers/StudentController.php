@@ -33,9 +33,20 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        return Student::Where('student_id',$id)->get();
+        $request->validate([
+            'student_id'=>'required|max:9',
+            // 'classroom'=>'required',
+            // 'time'=>'required'
+         ]);
+        $student = Student::Where('student_id',$request->student_id)->get();
+        if(count($student)>0){
+            return $student;
+        }
+        else {
+            return view(404);
+        }
     }
 
     /**
