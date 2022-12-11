@@ -6,6 +6,10 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudentSectonController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controller\StudentAuthController;
+use App\Http\Controller\AdminAuthController;
+use App\Http\Controller\InstructorAuthController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,27 +21,49 @@ use App\Http\Controllers\StudentController;
 |
 */
 
-//sections
+/* public */
+// sections
 Route::get('/sections',[SectionController::class,'index']);
-Route::post('/sections',[SectionController::class,'store']);
+Route::post('/sections',[SectionController::class,'store']); //protected
 Route::get('/sections/{id}',[SectionController::class,'show']);
 Route::get('/sections/search/{name}',[SectionController::class,'search']);
-Route::delete('/sections/{id}',[SectionController::class,'destroy']);
-Route::put('/sections/{id}',[SectionController::class,'update']);
+Route::delete('/sections/{id}',[SectionController::class,'destroy']); //protected
+Route::put('/sections/{id}',[SectionController::class,'update']); //protected
 // end of sections
 
-//courses 
+// courses 
 Route::get('/courses',[CourseController::class,'index']);
-Route::post('/courses',[CourseController::class,'store']);
-//end of courses
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::post('/courses',[CourseController::class,'store']); //protected
+// end of courses
 
 // students sections 
 Route::get('/section/students/{id}',[StudentSectonController::class,'sectionStudentsList']);
-//end
+// end of students sections 
 
 // students
 // Route::get('/students/{id}',[StudentController::class,'show']);
 Route::post('/students',[StudentController::class,'show']);
+// end of students 
+
+// authentication
+    //student
+    Route::post('/register',[StudentAuthController::class, 'register']);
+    Route::post('/login',[StudentAuthController::class, 'login']);
+    Route::post('/logout',[StudentAuthController::class, 'logout']); // protected 
+
+    //admin
+    Route::post('/login',[AdminAuthController::class, 'login']);
+    Route::post('/logout',[AdminAuthController::class, 'logout']); // protected 
+
+    //instructor
+    Route::post('/register',[InstructorAuthController::class, 'register']);
+    Route::post('/login',[InstructorAuthController::class, 'login']);
+    Route::post('/logout',[InstructorAuthController::class, 'logout']); // protected 
+// end of authentication
+
+
+
+/* protected */
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+// Route::group(['middleware' => ['auth:sanctum']], function(){
+// });
