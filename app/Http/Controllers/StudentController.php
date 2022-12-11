@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use Illuminate\Http\Response;
 class StudentController extends Controller
 {
     /**
@@ -13,7 +14,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+       return Student::All();
     }
 
     /**
@@ -45,7 +46,23 @@ class StudentController extends Controller
             return $student;
         }
         else {
-            return view(404);
+            return response([
+                'message'=>'No found Student by This ID'
+            ],401);
+        }
+    }
+
+    public function showGet($id)
+    {
+        
+        $student = Student::Where('student_id',$id)->get();
+        if(count($student)>0){
+            return $student;
+        }
+        else {
+            return response([
+                'message'=>'No found Student by This ID'
+            ],401);
         }
     }
 
@@ -58,7 +75,17 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated_id = htmlspecialchars($id);
+        $student = Student::Where('student_id',$validated_id);
+        if(count($student->get())==0){
+            return response([
+                'message'=>'No found Student by This ID'
+            ],401);
+        }
+        // print_r($request->all()) ;
+        $student->update($request->all());
+        return Student::Where('student_id',$request->student_id)->get();
+        //  return Response([$student],201);
     }
 
     /**
