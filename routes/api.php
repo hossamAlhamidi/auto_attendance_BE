@@ -41,3 +41,6 @@ Route::get('/section/students/{id}',[StudentSectonController::class,'sectionStud
 // students
 // Route::get('/students/{id}',[StudentController::class,'show']);
 Route::post('/students',[StudentController::class,'show']);
+Route::get('/students/{id}',[StudentController::class,'showGet']);
+Route::put('/students/{id}',[StudentController::class,'update']);
+Route::get('/students',[StudentController::class,'index']);
