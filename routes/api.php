@@ -52,13 +52,13 @@ Route::post('/students',[StudentController::class,'show']);
     Route::post('/logout',[StudentAuthController::class, 'logout']); // protected 
 
     //admin
-    Route::post('/login',[AdminAuthController::class, 'login']);
-    Route::post('/logout',[AdminAuthController::class, 'logout']); // protected 
+    // Route::post('/login',[AdminAuthController::class, 'login']);
+    // Route::post('/logout',[AdminAuthController::class, 'logout']); // protected 
 
     //instructor
-    Route::post('/register',[InstructorAuthController::class, 'register']);
-    Route::post('/login',[InstructorAuthController::class, 'login']);
-    Route::post('/logout',[InstructorAuthController::class, 'logout']); // protected 
+    // Route::post('/register',[InstructorAuthController::class, 'register']);
+    // Route::post('/login',[InstructorAuthController::class, 'login']);
+    // Route::post('/logout',[InstructorAuthController::class, 'logout']); // protected 
 // end of authentication
 
 
