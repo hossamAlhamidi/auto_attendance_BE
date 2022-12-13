@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreign('instructor_id')->references('instructor_id')->on("instructors")->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('instructor_name')->nullable();
             $table->string('classroom')->nullable();
-            $table->string('time')->nullable();
+            $table->json('time')->nullable();
             $table->timestamps();
         });
     }
