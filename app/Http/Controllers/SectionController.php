@@ -33,7 +33,33 @@ class SectionController extends Controller
             // 'classroom'=>'required',
             // 'time'=>'required'
          ]);
-         return Section::create($request->all());
+         $decoded_time = json_decode($request->time);
+    
+         $sunday=isset($decoded_time->sunday)?$decoded_time->sunday:"none";
+         $monday=isset($decoded_time->monday)?$decoded_time->monday:"none";
+         $tuesday =isset($decoded_time->tuesday)?$decoded_time->tuesday:"none";
+         $wednesday=isset($decoded_time->wednesday)?$decoded_time->wednesday:"none";
+         $thursday=isset($decoded_time->thursday)?$decoded_time->thursday:"none";
+
+
+        //  print_r(json_decode($request->time)) ;
+        //  echo $decoded_time->sun;
+        //  echo json_decode($request->time);
+        //  return Section::create($request->all());
+          return Section::create([
+            'section_id'=>$request->section_id,
+            'course_id'=>$request->course_id,
+            'instructor_id'=>$request->instructor_id,
+            'instructor_name'=>$request->instructor_name,
+            'classroom'=>$request->classroom,
+            'time'=>[ 
+                "sunday"=> $sunday,
+                "monday"=>$monday,
+                "tuesday"=> $tuesday,
+                "wednesday "=> $wednesday,
+                'thursday'=>$thursday
+     ],
+          ]);
         
     }
 

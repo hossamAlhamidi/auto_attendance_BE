@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('course_id')->primary();
             $table->string('course_name');
             $table->string('abbreviation');
+            $table->integer("course_hours");
+            $table->boolean('has_tutorial')->default(1);
+            $table->boolean('has_lab')->default(0);
             $table->timestamps();
         });
     }
