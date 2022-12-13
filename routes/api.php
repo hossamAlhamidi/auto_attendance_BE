@@ -50,18 +50,18 @@ Route::get('/students',[StudentController::class,'index']);
 
 // authentication
     //student
-    Route::post('/register',[StudentAuthController::class, 'register']);
-    Route::post('/login',[StudentAuthController::class, 'login']);
-    Route::post('/logout',[StudentAuthController::class, 'logout']); // protected 
+    Route::post('/students/register',[StudentAuthController::class, 'register']);
+    Route::post('/students/login',[StudentAuthController::class, 'login']);
+    Route::post('/students/logout',[StudentAuthController::class, 'logout']); // protected 
 
     //admin
-    // Route::post('/login',[AdminAuthController::class, 'login']);
-    // Route::post('/logout',[AdminAuthController::class, 'logout']); // protected 
+    Route::post('/admin/login',[AdminAuthController::class, 'login']);
+    Route::post('/admin/logout',[AdminAuthController::class, 'logout']); // protected 
 
     //instructor
-    // Route::post('/register',[InstructorAuthController::class, 'register']);
-    // Route::post('/login',[InstructorAuthController::class, 'login']);
-    // Route::post('/logout',[InstructorAuthController::class, 'logout']); // protected 
+    Route::post('/instructor/register',[InstructorAuthController::class, 'register']);
+    Route::post('/instructor/login',[InstructorAuthController::class, 'login']);
+    Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']); // protected 
 // end of authentication
 
 
