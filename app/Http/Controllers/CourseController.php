@@ -28,6 +28,7 @@ class CourseController extends Controller
             'course_id'=>'required',
             'course_name'=>'required',
             'abbreviation'=>'required',
+            'course_hours'=>'required',
             // 'classroom'=>'required',
             // 'time'=>'required'
          ]);
