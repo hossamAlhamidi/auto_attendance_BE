@@ -17,7 +17,7 @@ class StudentAuthController extends Controller
             'student_id' => 'required|string|unique:students,student_id',
             'student_name' => 'required|string',
             'email' => 'string',
-            'phone_number' => 'int',
+            'phone_number' => 'string',
             'password' => 'required|string|confirmed'
         ]);
 

@@ -6,9 +6,9 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudentSectonController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controller\StudentAuthController;
-use App\Http\Controller\AdminAuthController;
-use App\Http\Controller\InstructorAuthController;
+use App\Http\Controllers\StudentAuthController;
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\InstructorAuthController;
 
 /*
 |--------------------------------------------------------------------------
