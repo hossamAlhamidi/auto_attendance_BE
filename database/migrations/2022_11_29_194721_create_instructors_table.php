@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('instructor_name');
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();
+            $table->boolean('is_admin')->default(0);
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

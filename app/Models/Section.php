@@ -12,5 +12,8 @@ class Section extends Model
     protected $fillable = [
         'section_id','course_id','instructor_id','instructor_name','classroom','time' 
      ];
+     protected $casts = [
+        'time'=>'array'
+     ];
     use HasFactory;
 }
