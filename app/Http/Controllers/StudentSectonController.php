@@ -16,7 +16,7 @@ class StudentSectonController extends Controller
      */
     public function index()
     {
-        //
+        return Student_Section::all();
     }
 
     /**
@@ -36,9 +36,14 @@ class StudentSectonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showSections($student_id)
     {
-        //
+        return Student_Section::where('student_id', $student_id)->all();
+    }
+
+    public function showStudents($section_id)
+    {
+        return Student_Section::where('section_id', $section_id)->all();
     }
 
     /**
