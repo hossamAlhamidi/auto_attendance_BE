@@ -16,7 +16,7 @@ class StudentSectonController extends Controller
      */
     public function index()
     {
-        //
+        return Student_Section::all();
     }
 
     /**
@@ -36,10 +36,27 @@ class StudentSectonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showSections($student_id)
     {
-        //
+        // $sections = Student_Section::where('student_id', $student_id)->get(['section_id']); 
+
+        // foreach ($sections as $section) {
+            
+        // }
+        // $respons = [
+        //     'sections' => $sections 
+        // ];
+        // return response($respons, 200);
+
+        $result = DB::select( DB::raw("SELECT * FROM sections,`student__sections` where sections.section_id = student__sections.section_id and student_id = $student_id ") );
+        return $result;
     }
+
+    // public function showStudents($section_id)
+    // {
+    //     $studnets = Student_Section::where('section_id', $section_id)->get(['student_id']); 
+    //     return response([$studnets], 200);
+    // }
 
     /**
      * Update the specified resource in storage.
