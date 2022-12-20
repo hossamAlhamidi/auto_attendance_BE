@@ -38,13 +38,25 @@ class StudentSectonController extends Controller
      */
     public function showSections($student_id)
     {
-        return Student_Section::where('student_id', $student_id)->all();
+        // $sections = Student_Section::where('student_id', $student_id)->get(['section_id']); 
+
+        // foreach ($sections as $section) {
+            
+        // }
+        // $respons = [
+        //     'sections' => $sections 
+        // ];
+        // return response($respons, 200);
+
+        $result = DB::select( DB::raw("SELECT * FROM sections,`student__sections` where sections.section_id = student__sections.section_id and student_id = $student_id ") );
+        return $result;
     }
 
-    public function showStudents($section_id)
-    {
-        return Student_Section::where('section_id', $section_id)->all();
-    }
+    // public function showStudents($section_id)
+    // {
+    //     $studnets = Student_Section::where('section_id', $section_id)->get(['student_id']); 
+    //     return response([$studnets], 200);
+    // }
 
     /**
      * Update the specified resource in storage.
