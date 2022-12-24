@@ -10,7 +10,7 @@ class Section extends Model
     protected $primaryKey = ['course_id', 'instructor_id'];
     public $incrementing = false;
     protected $fillable = [
-        'section_id','course_id','instructor_id','instructor_name','classroom','time' 
+        'section_id','course_id','course_name','instructor_id','instructor_name','classroom','time','type'
      ];
      protected $casts = [
         'time'=>'array'
