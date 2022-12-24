@@ -28,7 +28,10 @@ class AdminAuthController extends Controller
         // $token = $admin->createToken('studnet_token')->plainTextToken;
 
         $response = [
-            'admin' => $admin
+            'admin_id' => $admin['admin_id'],
+            'admin_name' => $admin['admin_name'],
+            'email' => $admin['email'],
+            'phone_number' => $admin['phone_number']
         ];
 
         return response($response, 200);

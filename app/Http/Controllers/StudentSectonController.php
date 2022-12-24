@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Section;
 use App\Models\Student_Section;
 use Illuminate\Support\Facades\DB;
+
 class StudentSectonController extends Controller
 {
     /**
@@ -36,7 +37,7 @@ class StudentSectonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showSections($student_id)
+    public function showStudentsSections($student_id)
     {
         // $sections = Student_Section::where('student_id', $student_id)->get(['section_id']); 
 
@@ -48,9 +49,18 @@ class StudentSectonController extends Controller
         // ];
         // return response($respons, 200);
 
-        $result = DB::select( DB::raw("SELECT * FROM sections,`student__sections` where sections.section_id = student__sections.section_id and student_id = $student_id ") );
+        // $result = DB::select( DB::raw("SELECT * FROM sections,`student__sections` where sections.section_id = student__sections.section_id and student_id = $student_id ") );
+        $result = DB::select( DB::raw("SELECT sections.section_id, `course_id`, `instructor_id`, `instructor_name`, `classroom`, `time` FROM sections,`student__sections` where sections.section_id = student__sections.section_id and student_id = $student_id ") );
+
         return $result;
     }
+
+    
+    // public function showInstructorSections($instructor_id)
+    // {
+    //     $result = DB::select( DB::raw("SELECT section_id, `course_id`, `instructor_name`, `classroom`, `time` FROM sections where instructor_id = $instructor_id ") );
+    //     return $result;
+    // }
 
     // public function showStudents($section_id)
     // {

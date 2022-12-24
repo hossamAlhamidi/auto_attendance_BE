@@ -6,6 +6,8 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudentSectonController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\InstructorAuthController;
@@ -38,7 +40,8 @@ Route::post('/courses',[CourseController::class,'store']); //protected
 
 // students sections 
 Route::get('/section/students/{id}',[StudentSectonController::class,'sectionStudentsList']);
-Route::get('/students/sections/{id}',[StudentSectonController::class,'showSections']);
+Route::get('/students/sections/{id}',[StudentSectonController::class,'showStudentsSections']);
+// Route::get('/instructor/sections/{id}',[StudentSectonController::class,'showInstructorSections']);
 // Route::get('/sections/students/{id}',[StudentSectonController::class,'showStudents']);
 // end of students sections 
 
@@ -49,6 +52,16 @@ Route::get('/students/{id}',[StudentController::class,'showGet']);
 Route::put('/students/{id}',[StudentController::class,'update']);
 Route::get('/students',[StudentController::class,'index']);
 // end of students 
+
+
+// instructor
+Route::put('/instructor/{id}',[InstructorController::class,'update']);
+Route::get('/instructor/sections/{id}',[InstructorController::class,'showSections']);
+// end of instructor
+
+// admin
+// Route::put('/admin/{id}',[AdminController::class,'update']);
+// end admin
 
 // authentication
     //student
