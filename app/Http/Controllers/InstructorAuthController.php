@@ -31,7 +31,10 @@ class InstructorAuthController extends Controller
         // $token = $instructor->createToken('studnet_token')->plainTextToken;
 
         $response = [
-            'instructor' => $instructor
+            'instructor_id' => $instructor['instructor_id'],
+            'instructor_name' => $instructor['instructor_name'],
+            'email' => $instructor['email'],
+            'phone_number' => $instructor['phone_number']
         ];
 
         return response($response, 201);
@@ -56,7 +59,10 @@ class InstructorAuthController extends Controller
         // $token = $instructor->createToken('studnet_token')->plainTextToken;
 
         $response = [
-            'instructor' => $instructor
+            'instructor_id' => $instructor['instructor_id'],
+            'instructor_name' => $instructor['instructor_name'],
+            'email' => $instructor['email'],
+            'phone_number' => $instructor['phone_number']
         ];
 
         return response($response, 200);

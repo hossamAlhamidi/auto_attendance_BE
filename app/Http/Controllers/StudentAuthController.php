@@ -33,7 +33,10 @@ class StudentAuthController extends Controller
         // $token = $student->createToken('studnet_token')->plainTextToken;
 
         $response = [
-            'student' => $student
+            'student_id' => $student['student_id'],
+            'student_name' => $student['student_name'],
+            'email' => $student['email'],
+            'phone_number' => $student['phone_number']
         ];
 
         return response($response, 201);
@@ -58,7 +61,10 @@ class StudentAuthController extends Controller
         // $token = $student->createToken('studnet_token')->plainTextToken;
 
         $response = [
-            'student' => $student
+            'student_id' => $student['student_id'],
+            'student_name' => $student['student_name'],
+            'email' => $student['email'],
+            'phone_number' => $student['phone_number']
         ];
 
         return response($response, 200);
