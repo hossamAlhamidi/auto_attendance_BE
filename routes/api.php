@@ -61,6 +61,7 @@ Route::get('/students',[StudentController::class,'index']);
     Route::post('/admin/logout',[AdminAuthController::class, 'logout']); // protected 
 
     //instructor
+    Route::get('/instructors',[InstructorAuthController::class, 'index']);
     Route::post('/instructor/register',[InstructorAuthController::class, 'register']);
     Route::post('/instructor/login',[InstructorAuthController::class, 'login']);
     Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']); // protected 
