@@ -52,7 +52,7 @@ class AdminController extends Controller
 
         $admin = Admin::Where( 'admin_id', $validated_id )->first();
 
-        if(count($admin->get())==0){
+        if(!$admin){
             return response([
                 'message'=>'No admin found by This ID'
             ],401);

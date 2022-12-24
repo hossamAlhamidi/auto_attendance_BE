@@ -55,7 +55,7 @@ class InstructorController extends Controller
 
         $instructor = Instructor::Where('instructor_id', $validated_id)->first();
 
-        if(count($instructor->get())==0){
+        if(!$instructor){
             return response([
                 'message'=>'No Instructor found by This ID'
             ],401);
