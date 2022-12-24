@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Hash;
 
 class InstructorAuthController extends Controller
 {
+
+    public function index()
+    {
+       return Instructor::All();
+    }
     public function register(request $request)
     {
         $var = $request->validate([
