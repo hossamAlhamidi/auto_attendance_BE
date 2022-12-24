@@ -60,7 +60,7 @@ Route::get('/instructor/sections/{id}',[InstructorController::class,'showSection
 // end of instructor
 
 // admin
-Route::put('/admin/{id}',[AdminController::class,'update']);
+// Route::put('/admin/{id}',[AdminController::class,'update']);
 // end admin
 
 // authentication
