@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Section;
 use App\Models\Student_Section;
 use Illuminate\Support\Facades\DB;
+
 class StudentSectonController extends Controller
 {
     /**
@@ -55,11 +56,12 @@ class StudentSectonController extends Controller
     }
 
     
-    public function showinstructorSections($instructor_id)
-    {
-        $result = DB::select( DB::raw("SELECT section_id, `course_id`, `instructor_name`, `classroom`, `time` FROM sections where instructor_id = $instructor_id ") );
-        return $result;
-    }
+    // public function showInstructorSections($instructor_id)
+    // {
+    //     $result = DB::select( DB::raw("SELECT section_id, `course_id`, `instructor_name`, `classroom`, `time` FROM sections where instructor_id = $instructor_id ") );
+    //     return $result;
+    // }
+
     // public function showStudents($section_id)
     // {
     //     $studnets = Student_Section::where('section_id', $section_id)->get(['student_id']); 

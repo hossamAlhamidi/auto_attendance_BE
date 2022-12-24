@@ -76,7 +76,7 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         $validated_id = htmlspecialchars($id);
-        $student = Student::Where('student_id',$validated_id);
+        $student = Student::Where('student_id',$validated_id)->first();
         if(count($student->get())==0){
             return response([
                 'message'=>'No found Student by This ID'
@@ -84,8 +84,16 @@ class StudentController extends Controller
         }
         // print_r($request->all()) ;
         $student->update($request->all());
-        return Student::Where('student_id',$request->student_id)->get();
+        // return Student::Where('student_id',$request->student_id)->get();
         //  return Response([$student],201);
+        $response = [
+            'student_id' => $student['student_id'],
+            'student_name' => $student['student_name'],
+            'email' => $student['email'],
+            'phone_number' => $student['phone_number']
+        ];
+
+        return response($response, 201);
     }
 
     /**

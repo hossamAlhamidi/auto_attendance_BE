@@ -1,8 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Instructor;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Student_Section;
+
 
 class InstructorController extends Controller
 {
@@ -13,7 +17,7 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        //
+        return Instructor::all();
     }
 
     /**
@@ -47,7 +51,26 @@ class InstructorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated_id = htmlspecialchars($id);
+
+        $instructor = Instructor::Where('instructor_id', $validated_id)->first();
+
+        if(count($instructor->get())==0){
+            return response([
+                'message'=>'No Instructor found by This ID'
+            ],401);
+        }
+
+        $instructor->update($request->all());
+
+        $response = [
+            'instructor_id' => $instructor['instructor_id'],
+            'instructor_name' => $instructor['instructor_name'],
+            'email' => $instructor['email'],
+            'phone_number' => $instructor['phone_number']
+        ];
+
+        return response($response, 201);
     }
 
     /**
@@ -59,5 +82,12 @@ class InstructorController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function showSections($instructor_id)
+    {
+        $result = DB::select( DB::raw("SELECT section_id, `course_id`, `instructor_name`, `classroom`, `time` FROM sections where instructor_id = $instructor_id ") );
+        return $result;
     }
 }
