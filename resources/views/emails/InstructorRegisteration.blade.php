@@ -1,12 +1,18 @@
-<x-mail::message>
-# Introduction
+{{-- way 1 --}}
+@component('mail::message')
+# Welcome {{ $email['name'] }}
 
-The body of your message.
+{{ $email['body'] }}
 
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
+We advice you to change the password after you login.
 
-Thanks,<br>
-{{ config('app.name') }}
-</x-mail::message>
+@endcomponent
+
+{{-- way 2 --}}
+{{-- <x-mail::message>
+
+Hello <strong> {{ $name }} </strong>
+
+<p> {{ $body }} </p>
+
+</x-mail::message> --}}

@@ -50,11 +50,23 @@ class InstructorAuthController extends Controller
         ];
 
         if($instructor){
+
+            // way 1
             $email = [
-                'subject' => "Registration Info" ,
-                'body' => 'Hello Mr.' . $response['instructor_name']. '\n This is your password:' . $password 
+                'body' => 'This is your password: ' . $password ,
+                'name' => $response['instructor_name']
             ];
             Mail::to($response['email'])->send(new InstructorRegisteration($email));
+
+            // way 2
+            // $to_name = $response['instructor_name'];
+            // $to_email = $response['email'];
+            // $data = array('name' => 'Automatic Attendance', 'body' => 'This is your password:' . $password);
+            // Mail::send('emails.InstructorRegisteration', $data, function($message) use ($to_name, $to_email) 
+            // {
+            //     $message->to($to_email, $to_name)->subject('Registration Info');
+            //     $message->from('a.attendancy@gmail.com', 'Automatic Attendance');
+            // });
         }
         
         return response($response, 201);

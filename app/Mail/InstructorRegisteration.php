@@ -13,7 +13,7 @@ class InstructorRegisteration extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $email = [];
+    public $email = [];
 
     /**
      * Create a new message instance.
@@ -32,6 +32,7 @@ class InstructorRegisteration extends Mailable
      */
     public function build()
     {
-        return $this->from('a.attendancy@gmail.com', 'Automatic Attendance')-> subject($this->email['subject'])->markdown('emails.InstructorRegisteration');
+        return $this->from('a.attendancy@gmail.com', 'Automatic Attendance')
+        ->subject('Registration Info')->markdown('emails.InstructorRegisteration');
     }
 }
