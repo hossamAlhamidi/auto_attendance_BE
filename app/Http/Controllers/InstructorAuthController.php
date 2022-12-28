@@ -29,6 +29,7 @@ class InstructorAuthController extends Controller
             // 'password' => 'required|string|confirmed'
         ]);
 
+        // create randomed password 
         $password = Str::random(10);
 
         //create the instructor 
@@ -42,6 +43,7 @@ class InstructorAuthController extends Controller
 
         // $token = $instructor->createToken('instructor_token')->plainTextToken;
 
+        // formlate the response massage
         $response = [
             'instructor_id' => $instructor['instructor_id'],
             'instructor_name' => $instructor['instructor_name'],
@@ -49,8 +51,8 @@ class InstructorAuthController extends Controller
             'phone_number' => $instructor['phone_number']
         ];
 
+        // sending email to the user 
         if($instructor){
-
             // way 1
             $email = [
                 'body' => 'This is your password: ' . $password ,
