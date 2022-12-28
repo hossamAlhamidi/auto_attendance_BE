@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use App\Models\Instructor;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -24,7 +25,7 @@ class InstructorAuthController extends Controller
         $var = $request->validate([
             'instructor_id' => 'required|string|unique:instructors,instructor_id',
             'instructor_name' => 'required|string',
-            'email' => 'email',
+            'email' => 'email|unique:instructors,email',
             'phone_number' => 'string',
             // 'password' => 'required|string|confirmed'
         ]);
@@ -32,34 +33,49 @@ class InstructorAuthController extends Controller
         // create randomed password 
         $password = Str::random(10);
 
-        //create the instructor 
-        $instructor = Instructor::create([
-            'instructor_id' => $var['instructor_id'],
-            'instructor_name' => $var['instructor_name'],
-            'email' => $var['email'],
-            'phone_number' => $var['phone_number'],
-            'password' =>  bcrypt($password)
-        ]);
-
-        // $token = $instructor->createToken('instructor_token')->plainTextToken;
-
-        // formlate the response massage
-        $response = [
-            'instructor_id' => $instructor['instructor_id'],
-            'instructor_name' => $instructor['instructor_name'],
-            'email' => $instructor['email'],
-            'phone_number' => $instructor['phone_number']
-        ];
-
         // sending email to the user 
-        if($instructor){
-            // way 1
-            $email = [
-                'body' => 'This is your password: ' . $password ,
-                'name' => $response['instructor_name']
-            ];
-            Mail::to($response['email'])->send(new InstructorRegisteration($email));
+        $email = [
+            'body' => 'This is your password: ' . $password ,
+            'name' => $var['instructor_name']
+        ];
+        $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
 
+        if($send_email){
+            try {
+                //create the instructor 
+                $instructor = Instructor::create([
+                    'instructor_id' => $var['instructor_id'],
+                    'instructor_name' => $var['instructor_name'],
+                    'email' => $var['email'],
+                    'phone_number' => $var['phone_number'],
+                    'password' =>  bcrypt($password)
+                ]);
+
+                // formlate the response massage
+                $response = [
+                    'instructor_id' => $instructor['instructor_id'],
+                    'instructor_name' => $instructor['instructor_name'],
+                    'email' => $instructor['email'],
+                    'phone_number' => $instructor['phone_number']
+                ];
+                return response($response, 201);
+
+            } catch (\Throwable $th) {
+                return response('Wrong Email', 404);
+            }
+            
+
+
+            // way 1
+            // $email = [
+            //     'body' => 'This is your password: ' . $password ,
+            //     'name' => $response['instructor_name']
+            // ];
+            // try {
+            // } catch (\Throwable $th) {
+            //     return response('Something went wrong');
+            // }
+            
             // way 2
             // $to_name = $response['instructor_name'];
             // $to_email = $response['email'];
@@ -71,7 +87,9 @@ class InstructorAuthController extends Controller
             // });
         }
         
-        return response($response, 201);
+        // $token = $instructor->createToken('instructor_token')->plainTextToken;
+
+        return response('Something went wrong', 404);
     }
 
     public function login(request $request)
