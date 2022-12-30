@@ -67,6 +67,11 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        Course::where('course_id', $id)->delete();
+        $course = Course::where('course_id', $id)->first();
+        if(!$course)
+        {
+            return response('Course with this ID not found', 404);
+        }
+        $course->delete();
     }
 }
