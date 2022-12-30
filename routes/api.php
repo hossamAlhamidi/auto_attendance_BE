@@ -36,6 +36,7 @@ Route::put('/sections/{id}',[SectionController::class,'update']); //protected
 // courses 
 Route::get('/courses',[CourseController::class,'index']);
 Route::post('/courses',[CourseController::class,'store']); //protected
+Route::delete('/courses/{id}',[CourseController::class,'destroy']);
 // end of courses
 
 // students sections 
@@ -53,12 +54,14 @@ Route::post('/students',[StudentController::class,'show']);
 Route::get('/students/{id}',[StudentController::class,'showGet']);
 Route::put('/students/{id}',[StudentController::class,'update']);
 Route::get('/students',[StudentController::class,'index']);
+Route::delete('/students/{id}',[StudentController::class,'destroy']);
 // end of students 
 
 
 // instructor
 Route::put('/instructor/{id}',[InstructorController::class,'update']);
 Route::get('/instructor/sections/{id}',[InstructorController::class,'showSections']);
+Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
 // end of instructor
 
 // admin
