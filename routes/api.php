@@ -41,6 +41,8 @@ Route::post('/courses',[CourseController::class,'store']); //protected
 // students sections 
 Route::get('/section/students/{id}',[StudentSectonController::class,'sectionStudentsList']);
 Route::get('/students/sections/{id}',[StudentSectonController::class,'showStudentsSections']);
+Route::post('/students/sections',[StudentSectonController::class,'store']);
+Route::post('/students/sections/all',[StudentSectonController::class,'storeAll']);
 // Route::get('/instructor/sections/{id}',[StudentSectonController::class,'showInstructorSections']);
 // Route::get('/sections/students/{id}',[StudentSectonController::class,'showStudents']);
 // end of students sections 
