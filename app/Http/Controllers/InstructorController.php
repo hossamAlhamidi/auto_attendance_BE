@@ -81,7 +81,7 @@ class InstructorController extends Controller
      */
     public function destroy($id)
     {
-        Instructor::where('student_id', $id)->delete();
+        Instructor::where('instrcutor_id', $id)->delete();
 
     }
 
