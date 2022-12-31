@@ -24,15 +24,31 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'course_id'=>'required',
-            'course_name'=>'required',
-            'abbreviation'=>'required',
-            'course_hours'=>'required',
-            // 'classroom'=>'required',
+        $var = $request->validate([
+            'course_id' => 'required|string',
+            'course_name' => 'required|string',
+            'abbreviation' => 'required|string',
+            'course_hours' => 'required|string',
+
+            // 'has_tutorial' => 'int|nullable',
+            // 'has_lab' => 'int|nullable'
+
+            // 'classroom'=>'int|nuallable',
             // 'time'=>'required'
          ]);
-         return Course::create($request->all());
+
+         $course = Course::create([
+            'course_id' => $var['course_id'] . ' ' . $var['abbreviation'],
+            'course_name' => $var['course_name'],
+            'course_hours' => $var['course_hours']
+         ]);
+         
+         if(!$course)
+            return response('Error, coudle not add the course', 400);
+         else
+            return response('The course was add', 201);
+         
+
     }
     
 

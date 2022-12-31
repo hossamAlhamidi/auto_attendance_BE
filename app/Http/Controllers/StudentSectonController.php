@@ -112,8 +112,8 @@ class StudentSectonController extends Controller
         // ];
         // return response($respons, 200);
 
-        // $result = DB::select( DB::raw("SELECT * FROM sections,`student__sections` where sections.section_id = student__sections.section_id and student_id = $student_id ") );
-        $result = DB::select(DB::raw("SELECT sections.section_id, `course_id`, `instructor_id`, `instructor_name`, `classroom`, `time` FROM sections,`student__sections` where sections.section_id = student__sections.section_id and student_id = $student_id "));
+        $result = DB::select( DB::raw("SELECT * FROM sec-tions,`student__sections` where sections.section_id = student__sections.section_id and student_id = $student_id ") );
+        // $result = DB::select(DB::raw("SELECT sections.section_id, `course_id`, `instructor_id`, `instructor_name`, `classroom`, `time` FROM sections,`student__sections` where sections.section_id = student__sections.section_id and student_id = $student_id "));
 
         return $result;
     }
