@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Instructor extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'instructor_id','instructor_name','email','is_admin','phone_number','password' 
      ];
-    use HasFactory;
 }

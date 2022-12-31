@@ -21,9 +21,9 @@ class CourseSeeder extends Seeder
         $faker = Faker::create();
 
         foreach (range(1,5) as $course) {
-            $abbrev = Str::random(3);
+            $abbreviation = Str::random(3);
             $course = [
-                'course_id' => $abbrev . ' ' .random_int(1,3),
+                'course_id' => $abbreviation . ' ' .random_int(1,3),
                 'course_name' => 'This random course name',
                 // 'abbreviation' => random_int(100,999),
                 'course_hours' => random_int(1,3),
