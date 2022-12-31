@@ -21,11 +21,11 @@ class CourseSeeder extends Seeder
         $faker = Faker::create();
 
         foreach (range(1,5) as $course) {
-            // $password = Str::random(3);
+            $abbrev = Str::random(3);
             $course = [
-                'course_id' => random_int(10000,99999),
-                'course_name' => 'phy ' . random_int(1,3),
-                'abbreviation' => random_int(100,999),
+                'course_id' => $abbrev . ' ' .random_int(1,3),
+                'course_name' => 'This random course name',
+                // 'abbreviation' => random_int(100,999),
                 'course_hours' => random_int(1,3),
                 'has_tutorial' => random_int(0,1),
                 'has_lab' => random_int(0,1), 
