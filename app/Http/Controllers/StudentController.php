@@ -104,7 +104,11 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        Student::where('student_id', $id)->delete();
-
+        $student = Student::where('student_id', $id)->first();
+        if(!$student)
+        {
+            return response('Student with this ID not found', 404);
+        }
+        $student->delete();
     }
 }

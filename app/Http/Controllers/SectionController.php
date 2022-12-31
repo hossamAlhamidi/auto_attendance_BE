@@ -200,7 +200,7 @@ class SectionController extends Controller
         $section =  Section::where('section_id', '=', $id);
 
         if ($section->get()->isEmpty()) {
-            echo 'hi';
+            // echo 'hi';
             return ['message' => "section is not found"];
         }
         $section->delete();
