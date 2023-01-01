@@ -18,7 +18,7 @@ class StudentAuthController extends Controller
             'student_name' => 'required|string',
             'email' => 'string',
             'phone_number' => 'string',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string' //|confirmed
         ]);
 
         //create the student 
