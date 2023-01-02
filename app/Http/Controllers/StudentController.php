@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+
 class StudentController extends Controller
 {
     /**
@@ -104,11 +106,12 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $student = Student::where('student_id', $id)->first();
+        $student = DB::table('students')->where('student_id', $id);
         if(!$student)
         {
             return response('Student with this ID not found', 404);
         }
         $student->delete();
+        return response('Student is deleted', 200);
     }
 }
