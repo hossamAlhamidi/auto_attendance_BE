@@ -22,9 +22,10 @@ class InstructorSeeder extends Seeder
 
         foreach (range(1,5) as $instructor) {
             $password = Str::random(10);
+            $first_name = $faker->firstName();
             $instructor = [
-                'instructor_id' => Str::random(5),
-                'instructor_name' => $faker->firstName() . ' ' . $faker->lastName(),
+                'instructor_id' => $first_name . random_int(1,9999),
+                'instructor_name' => $first_name . ' ' . $faker->lastName(),
                 'email' => $faker->email(),
                 'phone_number' => $faker->phoneNumber(),
                 'is_admin' => random_int(0,1),
