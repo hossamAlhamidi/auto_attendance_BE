@@ -33,8 +33,8 @@ class CourseController extends Controller
             'abbreviation' => 'required|string',
             'course_hours' => 'required|int',
 
-            'has_tutorial' => 'int',
-            'has_lab' => 'int'
+            'has_tutorial' => 'int|nullable',
+            'has_lab' => 'int|nullable'
 
             // 'classroom'=>'int|nuallable',
             // 'time'=>'required'
@@ -49,9 +49,9 @@ class CourseController extends Controller
          ]);
          
          if(!$course)
-            return response('Error, could not add the course', 400);
+            return response(['message' => 'Error, coudle not add the course'], 400);
          else
-            return response('The course was add', 201);
+            return response(['message' => 'The course was add'], 201);
          
 
     }
@@ -89,11 +89,11 @@ class CourseController extends Controller
     public function destroy($id)
     {
         $course = DB::table('courses')->where('course_id', $id);
-        if(!$course)
+        if(!$course->first())
         {
-            return response('Course with this ID not found', 404);
+            return response(['message' => 'Course with this ID not found'], 404);
         }
         $course->delete();
-        return response('Courses is deleted', 200);
+        return response(['message' => 'Courses is deleted'], 200);
     }
 }

@@ -31,6 +31,9 @@ Route::get('/sections/{id}',[SectionController::class,'show']);
 Route::get('/sections/search/{name}',[SectionController::class,'search']);
 Route::delete('/sections/{id}',[SectionController::class,'destroy']); //protected
 Route::put('/sections/{id}',[SectionController::class,'update']); //protected
+Route::get('/sections/instructor/{id}',[SectionController::class,'FindSectionInstrctor']);
+Route::get('/sections/instructor/students/{id}',[SectionController::class,'FindStudentsForInstructor']);
+
 // end of sections
 
 // courses 
