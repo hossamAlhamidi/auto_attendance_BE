@@ -33,8 +33,8 @@ class CourseController extends Controller
             'abbreviation' => 'required|string',
             'course_hours' => 'required|int',
 
-            'has_tutorial' => 'int|nullable',
-            'has_lab' => 'int|nullable'
+            'has_tutorial' => '',
+            'has_lab' => ''
 
             // 'classroom'=>'int|nuallable',
             // 'time'=>'required'
