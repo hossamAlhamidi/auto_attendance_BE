@@ -107,11 +107,11 @@ class StudentController extends Controller
     public function destroy($id)
     {
         $student = DB::table('students')->where('student_id', $id);
-        if(!$student)
+        if(!$student->first())
         {
-            return response('Student with this ID not found', 404);
+            return response(['message' => 'Student with this ID not found'], 404);
         }
         $student->delete();
-        return response('Student is deleted', 200);
+        return response(['message' => 'Student is deleted'], 200);
     }
 }

@@ -61,7 +61,7 @@ class InstructorAuthController extends Controller
                 return response($response, 201);
 
             } catch (\Throwable $th) {
-                return response('Wrong Email', 404);
+                return response(['message' => 'Wrong Email'], 404);
             }
             
 

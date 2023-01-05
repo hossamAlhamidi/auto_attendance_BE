@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Section;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\StudentSectonController;
 
 class SectionController extends Controller
 {
@@ -209,5 +210,70 @@ class SectionController extends Controller
     public function search($name)
     {
         return Section::Where('section_name', 'like', '%' . $name . '%')->get();
+    }
+
+    public function FindSectionInstrctor($instructor_id)
+    {
+        $sections = Section::where('instructor_id', $instructor_id)->get();
+
+        if(!$sections->first())
+        {
+            return response(['message' => 'There is no section(s) assigned to this ID'], 404);
+        }
+
+        $response = [];
+
+        foreach($sections as $section)
+        {
+            $var = [
+                'section_id' => $section['section_id'],
+                'course_name' => $section['course_name'],
+                'course_id' => $section['course_id'],
+                'type' => $section['type'],
+                'classroom' => $section['classroom'],
+                'time' => $section['time'],
+            ];
+            $response[] = $var;
+        }
+        return response($response, 200);
+    }
+
+    public function FindStudentsForInstructor($instructor_id)
+    {
+        $sections = Section::where('instructor_id', $instructor_id)->get('section_id');
+
+        if(!$sections->first())
+        {
+            return response(['message' => 'There is no section(s) assigned to this ID'], 404);
+        }
+
+        $students = [];
+
+        foreach ($sections as $section) 
+        {
+            $student = (new StudentSectonController)->sectionStudentsList($section['section_id']);
+            
+            $students[] = $student;
+        }
+
+        $response = [];
+
+        foreach($students as $students_in_section)
+        {
+            foreach($students_in_section as $student)
+            {
+                $var = [
+                    'student_id' => $student->student_id,
+                    'student_name' => $student->student_name,
+                    'email' => $student->email,
+                    'section_id' => $student->section_id,
+                    'absence_percentage' => $student->absence_percentage,
+                    'number_of_absence' => $student->number_of_absence,
+
+                ];
+                $response[] = $var;
+            }
+        }
+        return response($response, 200); 
     }
 }
