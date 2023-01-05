@@ -43,7 +43,9 @@ class CourseController extends Controller
          $course = Course::create([
             'course_id' => $var['abbreviation'] . ' ' . $var['course_id'],
             'course_name' => $var['course_name'],
-            'course_hours' => $var['course_hours']
+            'course_hours' => $var['course_hours'],
+            'has_tutorial'=>$var['has_tutorial'],
+            'has_lab'=>$var['has_lab']
          ]);
          
          if(!$course)
