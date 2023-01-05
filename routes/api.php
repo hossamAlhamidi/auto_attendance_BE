@@ -11,7 +11,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\InstructorAuthController;
-
+use App\Http\Controllers\AbsenceController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -85,8 +85,10 @@ Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
     Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']); // protected 
 // end of authentication
 
-
-
+// absence 
+Route::get('student/absence/{id}',[AbsenceController::class,'show']);
+Route::post('student/absence',[AbsenceController::class,'store']);
+Route::delete('student/absence',[AbsenceController::class,'destroy']);
 /* protected */
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::group(['middleware' => ['auth:sanctum']], function(){

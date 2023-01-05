@@ -33,8 +33,8 @@ class CourseController extends Controller
             'abbreviation' => 'required|string',
             'course_hours' => 'required|int',
 
-            // 'has_tutorial' => 'int|nullable',
-            // 'has_lab' => 'int|nullable'
+            'has_tutorial' => 'int',
+            'has_lab' => 'int'
 
             // 'classroom'=>'int|nuallable',
             // 'time'=>'required'
@@ -43,11 +43,13 @@ class CourseController extends Controller
          $course = Course::create([
             'course_id' => $var['abbreviation'] . ' ' . $var['course_id'],
             'course_name' => $var['course_name'],
-            'course_hours' => $var['course_hours']
+            'course_hours' => $var['course_hours'],
+            'has_tutorial'=>$var['has_tutorial'],
+            'has_lab'=>$var['has_lab']
          ]);
          
          if(!$course)
-            return response('Error, coudle not add the course', 400);
+            return response('Error, could not add the course', 400);
          else
             return response('The course was add', 201);
          
