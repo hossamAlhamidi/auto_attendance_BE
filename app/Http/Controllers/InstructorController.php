@@ -82,12 +82,12 @@ class InstructorController extends Controller
     public function destroy($id)
     {
         $instructor = DB::table('instructors')->where('instructor_id', $id);
-        if(!$instructor)
+        if(!$instructor->first())
         {
-            return response('Instructor with this ID not found', 404);
+            return response(['message' => 'Instructor with this ID not found'], 404);
         }
         $instructor->delete();
-        return response('Instructor is deleted', 200);
+        return response(['message' => 'Instructor is deleted'], 200);
     }
 
 
