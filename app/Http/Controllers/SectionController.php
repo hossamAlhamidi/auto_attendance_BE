@@ -58,7 +58,7 @@ class SectionController extends Controller
                 'course_id' => $request->course_id,
                 'course_name' => $request->course_name,
                 'instructor_id' => $request->instructor_id,
-                'instructor_name' => $request->instructor_name,
+                'instructor_name' => $request->instructor_name?$request->instructor_name:"Not chosen yet",
                 'classroom' => $request->classroom,
                 'time' => [
                     "sunday" => $sunday,
@@ -97,7 +97,7 @@ class SectionController extends Controller
                     'course_id' => $request->course_id,
                     'course_name' => $request->course_name,
                     'instructor_id' => $request->tutorial_instructor_id,
-                    'instructor_name' => $request->tutorial_instructor_name,
+                    'instructor_name' => $request->tutorial_instructor_name?$request->tutorial_instructor_name:"Not chosen yet",
                     'classroom' => $request->tutorial_classroom,
                     'time' => [
                         "sunday" => $tut_sunday,
@@ -135,7 +135,7 @@ class SectionController extends Controller
                     'course_id' => $request->course_id,
                     'course_name' => $request->course_name,
                     'instructor_id' => $request->lab_instructor_id,
-                    'instructor_name' => $request->lab_instructor_name,
+                    'instructor_name' => $request->lab_instructor_name?$request->lab_instructor_name:"Not chosen yet",
                     'classroom' => $request->lab_classroom,
                     'time' => [
                         "sunday" => $lab_sunday,

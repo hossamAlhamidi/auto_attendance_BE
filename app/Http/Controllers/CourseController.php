@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Course;
+use Illuminate\Support\Facades\DB;
+
+
 class CourseController extends Controller
 {
     /**
@@ -28,7 +31,7 @@ class CourseController extends Controller
             'course_id' => 'required|string',
             'course_name' => 'required|string',
             'abbreviation' => 'required|string',
-            'course_hours' => 'required|string',
+            'course_hours' => 'required|int',
 
             // 'has_tutorial' => 'int|nullable',
             // 'has_lab' => 'int|nullable'
@@ -38,7 +41,7 @@ class CourseController extends Controller
          ]);
 
          $course = Course::create([
-            'course_id' => $var['course_id'] . ' ' . $var['abbreviation'],
+            'course_id' => $var['abbreviation'] . ' ' . $var['course_id'],
             'course_name' => $var['course_name'],
             'course_hours' => $var['course_hours']
          ]);
@@ -83,11 +86,12 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        $course = Course::where('course_id', $id)->first();
+        $course = DB::table('courses')->where('course_id', $id);
         if(!$course)
         {
             return response('Course with this ID not found', 404);
         }
         $course->delete();
+        return response('Courses is deleted', 200);
     }
 }
