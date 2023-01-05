@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Section extends Model
 {
+    use HasFactory;
+
     protected $primaryKey = ['course_id', 'instructor_id'];
     public $incrementing = false;
     protected $fillable = [
@@ -15,5 +17,4 @@ class Section extends Model
      protected $casts = [
         'time'=>'array'
      ];
-    use HasFactory;
 }
