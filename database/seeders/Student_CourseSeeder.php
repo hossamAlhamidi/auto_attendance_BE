@@ -19,7 +19,7 @@ class Student_CourseSeeder extends Seeder
         $students = DB::table('students')->get();
         $courses = DB::table('courses')->get();
 
-        foreach (range(1,5) as $student_course) {
+        foreach (range(1,10) as $student_course) {
             
             $student = $students->random();
             $course = $courses->random();
