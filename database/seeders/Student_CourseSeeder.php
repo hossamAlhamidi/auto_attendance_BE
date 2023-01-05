@@ -15,24 +15,24 @@ class Student_CourseSeeder extends Seeder
      */
     public function run()
     {
-        $student_courses = [];
-        $students = DB::table('students')->get();
-        $courses = DB::table('courses')->get();
+        // $student_courses = [];
+        // $students = DB::table('students')->get();
+        // $courses = DB::table('courses')->get();
 
-        foreach (range(1,10) as $student_course) {
+        // foreach (range(1,10) as $student_course) {
             
-            $student = $students->random();
-            $course = $courses->random();
+        //     $student = $students->random();
+        //     $course = $courses->random();
 
-            $student_course = [
-                'student_id' => $student->student_id,
-                'course_id' => $course->course_id,
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
-            $student_courses[] = $student_course; 
-        }
+        //     $student_course = [
+        //         'student_id' => $student->student_id,
+        //         'course_id' => $course->course_id,
+        //         'created_at' => now(),
+        //         'updated_at' => now()
+        //     ];
+        //     $student_courses[] = $student_course; 
+        // }
 
-        DB::table('student_courses')->insert($student_courses);
+        // DB::table('student_courses')->insert($student_courses);
     }
 }
