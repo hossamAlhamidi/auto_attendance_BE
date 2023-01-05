@@ -20,7 +20,7 @@ class SectionSeeder extends Seeder
         $courses = DB::table('courses')->get();
         $instructors = DB::table('instructors')->get();
 
-        foreach (range(1,5) as $section) {
+        foreach (range(1,10) as $section) {
             
             $course = $courses->random();
             $instructor = $instructors->random();

@@ -20,7 +20,7 @@ class InstructorSeeder extends Seeder
         $instructors = [];
         $faker = Faker::create();
 
-        foreach (range(1,5) as $instructor) {
+        foreach (range(1,10) as $instructor) {
             $password = Str::random(10);
             $first_name = $faker->firstName();
             $instructor = [

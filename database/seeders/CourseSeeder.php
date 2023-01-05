@@ -20,7 +20,7 @@ class CourseSeeder extends Seeder
         $courses = [];
         $faker = Faker::create();
 
-        foreach (range(1,5) as $course) {
+        foreach (range(1,10) as $course) {
             // $abbreviation = Str::random(3);
             $abbreviation = substr(str_shuffle(str_repeat(strtoupper("abcdefghijklmnopqrstuvwxyz"), 3)), 0, 3);
             $course = [

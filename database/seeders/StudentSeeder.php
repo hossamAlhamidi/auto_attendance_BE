@@ -20,7 +20,7 @@ class StudentSeeder extends Seeder
         $students = [];
         $faker = Faker::create();
 
-        foreach (range(1,5) as $student) {
+        foreach (range(1,10) as $student) {
             $password = Str::random(10);
             $student = [
                 'student_id' => '44'. random_int(1,9) . '10' . random_int(1000,9999),
