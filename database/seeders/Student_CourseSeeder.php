@@ -31,6 +31,11 @@ class Student_CourseSeeder extends Seeder
         //         'updated_at' => now()
         //     ];
         //     $student_courses[] = $student_course; 
+
+        //     $students->where('student_id',$student->student_id)->keyBy('remove');
+        //     $students->forget('remove');
+        //     $courses->where('course_id',$course->course_id)->keyBy('remove');
+        //     $courses->forget('remove');
         // }
 
         // DB::table('student_courses')->insert($student_courses);
