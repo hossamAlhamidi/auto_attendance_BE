@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Section;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\StudentSectonController;
+use Dotenv\Repository\RepositoryInterface;
 
 class SectionController extends Controller
 {
@@ -238,7 +240,7 @@ class SectionController extends Controller
         return response($response, 200);
     }
 
-    public function FindStudentsForInstructor($instructor_id)
+    public function FindStudentForInstructor($instructor_id, $student_id = 0)
     {
         $sections = Section::where('instructor_id', $instructor_id)->get('section_id');
 
@@ -274,6 +276,61 @@ class SectionController extends Controller
                 $response[] = $var;
             }
         }
+
+        if($student_id != 0)
+        {
+            $response_one_student = [];
+            foreach ($response as $student) {
+                if($student['student_id'] == $student_id)
+                {
+                    $response_one_student[] = $student;
+                }
+            }
+            return response($response_one_student, 200); 
+        }
         return response($response, 200); 
+        // return response()->json([
+        //     'success' => true,
+        //     'data' => $students
+        // ],200);
     }
+
+
+    // public function FindStudentForInstructor(Request $request)
+    // {
+        // $instructor_id = $request->instructor_id;
+        // $student_id = $request->student_id;
+
+        // $students = (new SectionController)->FindStudentsForInstructor($instructor_id);
+        // $students = $this->FindStudentsForInstructor($instructor_id);
+        // $students = json_decode($this->FindStudentsForInstructor($instructor_id), true);
+
+        // $Astudent = [];
+        // foreach($students as $student)
+        // {
+        //     foreach ($student as $value) {
+        //         if($value['student_id'] == $student_id)
+        //         {
+        //             $Astudent[] = $student->where('student_id', $student_id);
+        //             break;
+        //         }
+        //     }
+        //     if(count($Astudent)>0)
+        //     {
+        //         break;
+        //     }
+        // }
+
+
+        // if(!$students)
+        // {
+        //     return response(['message' => 'No student found with this ID'], 400);
+        // }
+
+        // return response($response, 200); 
+        // return response()->json([
+        //     'success' => true,
+        //     'data' => $students
+        // ],200);
+    // }
 }

@@ -32,7 +32,8 @@ Route::get('/sections/search/{name}',[SectionController::class,'search']);
 Route::delete('/sections/{id}',[SectionController::class,'destroy']); //protected
 Route::put('/sections/{id}',[SectionController::class,'update']); //protected
 Route::get('/sections/instructor/{id}',[SectionController::class,'FindSectionInstrctor']);
-Route::get('/sections/instructor/students/{id}',[SectionController::class,'FindStudentsForInstructor']);
+// Route::get('/sections/instructor/students/{instructor_id}',[SectionController::class,'FindStudentsForInstructor']); // no need no more 
+Route::get('/sections/instructor/students/{instructor_id}/{student_id?}',[SectionController::class,'FindStudentForInstructor']);
 
 // end of sections
 
@@ -54,7 +55,7 @@ Route::post('/students/sections/all',[StudentSectonController::class,'storeAll']
 // students
 // Route::get('/students/{id}',[StudentController::class,'show']);
 Route::post('/students',[StudentController::class,'show']);
-Route::get('/students/{id}',[StudentController::class,'showGet']);
+Route::get('/students/{student_id}/{instructor_id?}',[StudentController::class,'showGet']);
 Route::put('/students/{id}',[StudentController::class,'update']);
 Route::get('/students',[StudentController::class,'index']);
 Route::delete('/students/{id}',[StudentController::class,'destroy']);

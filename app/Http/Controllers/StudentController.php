@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use App\Models\Instructor;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -54,17 +55,55 @@ class StudentController extends Controller
         }
     }
 
-    public function showGet($id)
+    public function showGet($student_id, $instructor_id = 0)
     {
-        
-        $student = Student::Where('student_id',$id)->get();
-        if(count($student)>0){
-            return $student;
+        if($instructor_id ==0)
+        {
+            $student = Student::Where('student_id',$student_id)->get();
+            if(count($student)>0){
+                return $student;
+            }
+            else {
+                return response([
+                    'message'=>'No found Student by This ID'
+                ],401);
+            }
         }
-        else {
-            return response([
-                'message'=>'No found Student by This ID'
-            ],401);
+        else
+        {
+            $instructor = Instructor::where('instructor_id', $instructor_id)->first();
+            
+            if(!$instructor)
+            {
+                return response(['message' => 'There is no section(s) assigned to this Instructor ID'], 404);
+            }
+
+            
+            $student = Student::Where('student_id',$student_id)->get();
+            if(count($student) != 1)
+            {
+                return response([
+                    'message'=>'No found Student by This ID'
+                ],401);            
+            }
+
+            if ($instructor->is_admin == 1) 
+            {
+                return response($student, 200);
+            }
+            else
+            {
+                $student = (new SectionController)->FindStudentForInstructor($instructor->instructor_id, $student_id);
+            }
+    
+            if(!$student->isEmpty()){
+                return response($student, 200);
+            }
+            else {
+                return response([
+                    'message'=>'No found Student by This ID'
+                ],401);
+            }
         }
     }
 
