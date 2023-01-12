@@ -75,10 +75,9 @@ class StudentController extends Controller
             
             if(!$instructor)
             {
-                return response(['message' => 'There is no section(s) assigned to this Instructor ID'], 404);
+                return response(['message' => 'There is no Instructor with this Instructor ID'], 404);
             }
 
-            
             $student = Student::Where('student_id',$student_id)->get();
             if(count($student) != 1)
             {
