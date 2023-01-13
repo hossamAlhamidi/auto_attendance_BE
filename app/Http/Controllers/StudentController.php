@@ -41,18 +41,59 @@ class StudentController extends Controller
     {
         $request->validate([
             'student_id'=>'required|max:9',
+            'instructor_id' => '',
             // 'classroom'=>'required',
             // 'time'=>'required'
          ]);
-        $student = Student::Where('student_id',$request->student_id)->get();
-        if(count($student)>0){
-            return $student;
-        }
-        else {
-            return response([
-                'message'=>'No found Student by This ID'
-            ],401);
-        }
+
+        $student_id = $request->student_id;
+        $instructor_id = $request->instructor_id;
+
+        $instructor = Instructor::where('instructor_id', $instructor_id)->first();
+            
+            if(!$instructor)
+            {
+                return response(['message' => 'There is no Instructor with this Instructor ID'], 404);
+            }
+
+            $student = Student::Where('student_id',$student_id)->get();
+            if(count($student) != 1)
+            {
+                return response([
+                    'message'=>'No found Student by This ID'
+                ],401);            
+            }
+
+            if ($instructor->is_admin == 1) 
+            {
+                return response($student, 200);
+            }
+            else
+            {
+                $student = (new SectionController)->FindStudentForInstructor($instructor->instructor_id, $student_id);
+            }
+    
+            if(!$student->isEmpty())
+            {
+                return response($student, 200);
+            }
+            else {
+                return response([
+                    'message'=>'You are not authorized'
+                ],401);
+            }
+
+        
+
+        // $student = Student::Where('student_id',$request->student_id)->get();
+        // if(count($student)>0){
+        //     return $student;
+        // }
+        // else {
+        //     return response([
+        //         'message'=>'No found Student by This ID'
+        //     ],401);
+        // }
     }
 
     public function showGet($student_id, $instructor_id = 0)
