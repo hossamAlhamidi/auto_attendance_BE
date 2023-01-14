@@ -114,7 +114,8 @@ class InstructorAuthController extends Controller
             'instructor_id' => $instructor['instructor_id'],
             'instructor_name' => $instructor['instructor_name'],
             'email' => $instructor['email'],
-            'phone_number' => $instructor['phone_number']
+            'phone_number' => $instructor['phone_number'],
+            'is_admin' => $instructor['is_admin']
         ];
 
         return response($response, 200);

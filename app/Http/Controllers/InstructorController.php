@@ -6,7 +6,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Student_Section;
-
+use App\Models\Section;
 
 class InstructorController extends Controller
 {
@@ -93,7 +93,8 @@ class InstructorController extends Controller
 
     public function showSections($instructor_id)
     {
-        $result = DB::select( DB::raw("SELECT section_id, `course_id`, `instructor_name`, `classroom`, `time` FROM sections where instructor_id = $instructor_id ") );
+        // $result = DB::select( DB::raw("SELECT section_id, `course_id`, `instructor_name`, `classroom`, `time` FROM sections where instructor_id = $instructor_id ") );
+       $result = Section::Where('instructor_id',$instructor_id)->get();
         return $result;
     }
 }

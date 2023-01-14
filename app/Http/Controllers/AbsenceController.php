@@ -32,8 +32,17 @@ class AbsenceController extends Controller
             'student_id'=>'required|max:9',
             'section_id'=>'required|max:7'
         ]);
- 
         
+       
+
+        // $student = DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->get();
+       $student = DB::select(DB::raw("SELECT * FROM `student__sections` where section_id = $var[section_id] and student_id = $var[student_id] "));
+        if(!$student){
+            return response(
+                ['message' => 'Student is not registered on this section'],
+                404
+            );
+        }
         $now = now();
         try{
             $absence= DB::insert("insert into absences (student_id, section_id,created_at,updated_at) values ($var[student_id], $var[section_id],'$now','$now')");
