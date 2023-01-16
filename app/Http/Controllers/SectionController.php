@@ -284,12 +284,12 @@ class SectionController extends Controller
                 if($student['student_id'] == $student_id)
                 {
                     $var = [
-                        'student_id' => $student->student_id,
-                        'student_name' => $student->student_name,
-                        'email' => $student->email,
-                        'section_id' => $student->section_id,
-                        'absence_percentage' => $student->absence_percentage,
-                        'number_of_absence' => $student->number_of_absence,
+                        'student_id' => $student['student_id'],
+                        'student_name' => $student['student_name'],
+                        'email' => $student['email'],
+                        'section_id' => $student['section_id'],
+                        'absence_percentage' => $student['absence_percentage'],
+                        'number_of_absence' => $student['number_of_absence'],
                     ];
                     $response_one_student[] = $var;
                 }
