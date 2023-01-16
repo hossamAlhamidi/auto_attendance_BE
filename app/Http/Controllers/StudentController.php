@@ -73,7 +73,7 @@ class StudentController extends Controller
                 $student = (new SectionController)->FindStudentForInstructor($instructor->instructor_id, $student_id);
             }
     
-            if(!$student->isEmpty())
+            if(count($student) > 0)
             {
                 return response($student, 200);
             }

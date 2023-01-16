@@ -283,16 +283,22 @@ class SectionController extends Controller
             foreach ($response as $student) {
                 if($student['student_id'] == $student_id)
                 {
-                    $response_one_student[] = $student;
+                    $var = [
+                        'student_id' => $student->student_id,
+                        'student_name' => $student->student_name,
+                        'email' => $student->email,
+                        'section_id' => $student->section_id,
+                        'absence_percentage' => $student->absence_percentage,
+                        'number_of_absence' => $student->number_of_absence,
+                    ];
+                    $response_one_student[] = $var;
                 }
             }
-            return response($response_one_student, 200); 
+            // return response($response_one_student, 200); 
+            return $response_one_student; 
         }
-        return response($response, 200); 
-        // return response()->json([
-        //     'success' => true,
-        //     'data' => $students
-        // ],200);
+        // return response($response, 200); 
+        return $response; 
     }
 
 
