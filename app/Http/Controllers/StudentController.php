@@ -7,7 +7,8 @@ use App\Models\Student;
 use App\Models\Instructor;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Section;
+use App\Models\Student_Section;
 class StudentController extends Controller
 {
     /**
@@ -40,7 +41,7 @@ class StudentController extends Controller
     public function show(Request $request)
     {
         $request->validate([
-            'student_id'=>'required|max:9',
+            'student_id'=>'required|min:3|max:9',
             'instructor_id' => '',
             // 'classroom'=>'required',
             // 'time'=>'required'
@@ -56,8 +57,8 @@ class StudentController extends Controller
                 return response(['message' => 'There is no Instructor with this Instructor ID'], 404);
             }
 
-            $student = Student::Where('student_id',$student_id)->get();
-            if(count($student) != 1)
+            $student = Student::Where('student_id','like','%'.$student_id.'%')->get();
+            if(count($student) == 0)
             {
                 return response([
                     'message'=>'No found Student by This ID'
@@ -70,16 +71,40 @@ class StudentController extends Controller
             }
             else
             {
-                $student = (new SectionController)->FindStudentForInstructor($instructor->instructor_id, $student_id);
+                // $student = (new SectionController)->FindStudentForInstructor($instructor_id, $student_id);
+                // $student = DB::select(DB::raw("SELECT student_id,student_name,email,phone_number,section_id FROM students,`sections` where sections.instructor_id = $instructor_id and student_id = $student_id "));
+                $sections = Section::Where('instructor_id',$instructor_id)->get('section_id');
+                $sections_arr = [];
+                foreach($sections as $section){
+                    // echo $section->section_id;
+                    array_push($sections_arr,$section->section_id);
+                }
+                $students_id = [];
+                // foreach($sections_arr as $section_id){
+                //     //  $student = DB::select(DB::raw("SELECT students.student_id,student_name,email,phone_number,section_id FROM students,`student__sections` where student__sections.student_id = $student_id and section_id = $section_id and  "));
+                //     $student=DB::select(DB::raw("SELECT student_id FROM student__sections where student_id = $student_id and section_id = $section_id"));
+                   
+                // }
+                $student = DB::table('student__sections')->whereIn('section_id', $sections_arr)->get('student_id');
+                foreach($student as $st){
+                    array_push($students_id,$st->student_id);
+                }
+
+                // foreach( $students_id as $student_id){
+                //   $student =  DB::select(DB::raw("SELECT student_id,student_name,email,phone_number FROM students where student_id = $student_id "));
+                // }
+                $student = DB::table('students')->whereIn('student_id', $students_id)->where('student_id','like','%'.$student_id.'%')->get();
+
+                
             }
-    
-            if(count($student) > 0)
+            // if(!$student->isEmpty())
+            if(count($student)>0)
             {
                 return response($student, 200);
             }
             else {
                 return response([
-                    'message'=>'You are not authorized'
+                    'message'=>'No students results registered to you sections'
                 ],401);
             }
 
@@ -96,6 +121,7 @@ class StudentController extends Controller
         // }
     }
 
+    // not used till now
     public function showGet($student_id, $instructor_id = 0)
     {
         if($instructor_id ==0)

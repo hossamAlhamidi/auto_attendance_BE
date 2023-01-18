@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student_Section extends Model
 {
+    use HasFactory;
+
     protected $primaryKey = ['student_id', 'section_id'];
     protected $fillable = [
         'student_id','section_id','absence_percentage','number_of_absence' 
      ];
-    use HasFactory;
 }
