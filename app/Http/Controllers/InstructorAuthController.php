@@ -51,6 +51,8 @@ class InstructorAuthController extends Controller
                     'password' =>  bcrypt($password)
                 ]);
 
+                // $token = $instructor->createToken('instructor_token', ['*'])->plainTextToken;
+
                 // formlate the response massage
                 $response = [
                     'instructor_id' => $instructor['instructor_id'],
@@ -108,9 +110,15 @@ class InstructorAuthController extends Controller
             );
         endif;
 
-        // $token = $instructor->createToken('studnet_token')->plainTextToken;
+        if($instructor->is_admin == 0){
+            $token = $instructor->createToken('instructor_token', ['instructor'])->plainTextToken;
+
+        } else {
+            $token = $instructor->createToken('instructor_token', ['admin'])->plainTextToken;
+        }
 
         $response = [
+            'token' => $token,
             'instructor_id' => $instructor['instructor_id'],
             'instructor_name' => $instructor['instructor_name'],
             'email' => $instructor['email'],

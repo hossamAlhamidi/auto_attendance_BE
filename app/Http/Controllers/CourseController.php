@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use Illuminate\Support\Facades\DB;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 
 class CourseController extends Controller
@@ -88,7 +91,13 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
+        // if(!auth()->guard('instructor')->user()->Auth::guard('instructor'))
+        // {
+        //     return response()->json(['massage' => 'unauthorized'], 403);
+        // }
+
         $course = DB::table('courses')->where('course_id', $id);
+        
         if(!$course->first())
         {
             return response(['message' => 'Course with this ID not found'], 404);

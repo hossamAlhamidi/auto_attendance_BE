@@ -160,7 +160,7 @@ class StudentSectonController extends Controller
         // join('student__sections', 'student__sections.student_id', '=', 'students.student_id')
         // ->get();
         // $result = DB::statement('select * from students');
-        $result = DB::select(DB::raw("SELECT * FROM students,`student__sections` where students.student_id = student__sections.student_id and section_id = $section_id "));
+        $result = DB::select(DB::raw("SELECT students.student_id, students.student_name, students.email, students.phone_number, section_id, absence_percentage, number_of_absence FROM students,`student__sections` where students.student_id = student__sections.student_id and section_id = $section_id "));
         return $result;
 
         // ->where('countries.country_name', $country)

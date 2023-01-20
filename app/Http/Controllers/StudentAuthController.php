@@ -72,7 +72,7 @@ class StudentAuthController extends Controller
 
     public function logout(request $request)
     {
-        // auth()->student()->tokens()->delete();
+        // auth()->user()->tokens()->delete();
         return [
             'message' => 'logged out'
         ];

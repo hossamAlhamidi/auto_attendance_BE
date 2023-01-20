@@ -93,7 +93,11 @@ Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
 Route::get('student/absence/{id}',[AbsenceController::class,'show']);
 Route::post('student/absence',[AbsenceController::class,'store']);
 Route::delete('student/absence',[AbsenceController::class,'destroy']);
+
+
+
 /* protected */
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-// Route::group(['middleware' => ['auth:sanctum']], function(){
-// });
+
+Route::group(['middleware'=>['auth:sanctum']], function () {
+    Route::get('/sections',[SectionController::class,'index']);
+});
