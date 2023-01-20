@@ -149,9 +149,23 @@ class StudentSectonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $var=  $request->validate([
+            'student_id'=>'required',
+            'section_id'=>'required',
+        ]);
+
+        $student = DB::table('student__sections')->where('student_id', $var['student_id'])->where('section_id', $var['section_id']);
+        
+        if(!$student->first())
+        {
+            return response()->json(['massage' => 'There is no student with this ID in this section'], 400);
+        }
+        
+        $student->delete();
+
+        return response()->json(['massage' => 'Delete Success'], 200);
     }
 
     public function sectionStudentsList($section_id)
