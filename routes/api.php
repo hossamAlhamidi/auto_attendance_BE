@@ -47,7 +47,8 @@ Route::get('/section/students/{id}',[StudentSectonController::class,'sectionStud
 Route::get('/students/sections/{id}',[StudentSectonController::class,'showStudentsSections']);
 Route::post('/students/sections',[StudentSectonController::class,'store']);
 Route::post('/students/sections/all',[StudentSectonController::class,'storeAll']);
-Route::delete('students/sections',[StudentSectonController::class,'destroy']);
+Route::delete('/students/sections',[StudentSectonController::class,'destroy']);
+
 // Route::get('/instructor/sections/{id}',[StudentSectonController::class,'showInstructorSections']);
 // Route::get('/sections/students/{id}',[StudentSectonController::class,'showStudents']);
 // end of students sections 
