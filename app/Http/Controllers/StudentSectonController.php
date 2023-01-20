@@ -156,7 +156,6 @@ class StudentSectonController extends Controller
             'section_id'=>'required',
         ]);
 
-        // $student = Student_Section::where('student_id', $var['student_id'])->where('section_id', $var['section_id'])->first();
         $student = DB::table('student__sections')->where('student_id', $var['student_id'])->where('section_id', $var['section_id']);
         
         if(!$student->first())
