@@ -18,7 +18,8 @@ return new class extends Migration
              $table->foreign('student_id')->references('student_id')->on("students")->cascadeOnDelete()->cascadeOnUpdate();
              $table->string('section_id');
              $table->foreign('section_id')->references('section_id')->on("sections")->cascadeOnDelete()->cascadeOnUpdate();
-             $table->date("absence_date")->default(Carbon::now()->format('Y-m-d'));
+             $table->date("absence_date");
+            //  ->default(Carbon::now()->format('Y-m-d'));
              $table->timestamps();
              $table->primary(['student_id','section_id','absence_date']);
         });

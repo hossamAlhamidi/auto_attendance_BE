@@ -200,13 +200,14 @@ class SectionController extends Controller
      */
     public function destroy($id)
     {
-        $section =  Section::where('section_id', '=', $id);
+        $section =  Section::where('section_id', $id);
 
-        if ($section->get()->isEmpty()) {
-            // echo 'hi';
-            return ['message' => "section is not found"];
+        if (!$section->first()) 
+        {
+            return response()->json(['message' => "section is not found"], 404);
         }
         $section->delete();
+        return response(['message' => 'section is deleted'], 200);
     }
 
     public function search($name)
