@@ -35,8 +35,8 @@ class AbsenceController extends Controller
         
        
 
-        // $student = DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->get();
-       $student = DB::select(DB::raw("SELECT * FROM `student__sections` where section_id = $var[section_id] and student_id = $var[student_id] "));
+        $student = DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->first();
+    //    $student = DB::select(DB::raw("SELECT * FROM `student__sections` where section_id = $var[section_id] and student_id = $var[student_id] "));
         if(!$student){
             return response(
                 ['message' => 'Student is not registered on this section'],
@@ -46,13 +46,14 @@ class AbsenceController extends Controller
         $now = now();
         try{
             $absence= DB::insert("insert into absences (student_id, section_id,created_at,updated_at) values ($var[student_id], $var[section_id],'$now','$now')");
-
+            $student->number_of_absence = $student->number_of_absence + 1 ;
+            DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->update(['number_of_absence' => $student->number_of_absence]);
         }
         catch (\Throwable $th) {
             return response(['message'=>'Error, could not add the absence'], 400);
         }
 
-        return response('absence is added', 201);
+        return response(['massage' => 'absence is added'], 201);
     }
 
     /**
@@ -97,9 +98,14 @@ class AbsenceController extends Controller
         $absence = DB::table('absences')->where('student_id', $var['student_id'])->where('section_id',$var['section_id'])->where('absence_date',$var['absence_date']);
         if($absence->get()->isEmpty())
         {
-            return response('this Absence info is not found', 404);
+            return response(['massage' => 'this Absence info is not found'], 404);
         }
         $absence->delete();
-        return response('Absence is deleted', 200);
+
+        $student = DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->first();
+        $student->number_of_absence = $student->number_of_absence - 1 ;
+        DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->update(['number_of_absence' => $student->number_of_absence]);
+
+        return response(['massage' => 'Absence is deleted'], 200);
     }
 }
