@@ -11,15 +11,15 @@ use Illuminate\Support\Str;
 use App\Mail\InstructorRegisteration;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-
-
+use Laravel\Sanctum\HasApiTokens;;
+use Illuminate\Support\Facades\Auth;
 class InstructorAuthController extends Controller
 {
 
-    public function index()
-    {
-       return Instructor::All();
-    }
+    // public function index()
+    // {
+    //      return Instructor::select('instructor_id', 'instructor_name', 'email','phone_number')->get();
+    // }
     public function register(request $request)
     {
         $var = $request->validate([
@@ -131,7 +131,10 @@ class InstructorAuthController extends Controller
 
     public function logout(request $request)
     {
-        // auth()->instructor()->tokens()->delete();
+    //     $user = Auth::guard('sanctum')->user();
+    //    echo $user->rememberToekn;
+        $request->user()->currentAccessToken()->delete();
+        // $user->currentAccessToken()->delete();
         return [
             'message' => 'logged out'
         ];

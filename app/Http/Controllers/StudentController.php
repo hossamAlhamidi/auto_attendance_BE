@@ -121,12 +121,12 @@ class StudentController extends Controller
         // }
     }
 
-    // not used till now
+    
     public function showGet($student_id, $instructor_id = 0)
     {
         if($instructor_id ==0)
         {
-            $student = Student::Where('student_id',$student_id)->get();
+            $student = Student::Where('student_id',$student_id)->get(['student_id','student_name','email','phone_number']);
             if(count($student)>0){
                 return $student;
             }
@@ -136,6 +136,7 @@ class StudentController extends Controller
                 ],401);
             }
         }
+        // maybe else is not needed any more since we moved the logic to the function above and this function to get student info so i can update it later
         else
         {
             $instructor = Instructor::where('instructor_id', $instructor_id)->first();

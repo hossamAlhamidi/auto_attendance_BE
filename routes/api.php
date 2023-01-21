@@ -25,7 +25,7 @@ use App\Http\Controllers\AbsenceController;
 
 /* public */
 // sections
-Route::get('/sections',[SectionController::class,'index']);
+// Route::get('/sections',[SectionController::class,'index']);
 Route::post('/sections',[SectionController::class,'store']); //protected
 Route::get('/sections/{id}',[SectionController::class,'show']);
 Route::get('/sections/search/{name}',[SectionController::class,'search']);
@@ -64,9 +64,14 @@ Route::delete('/students/{id}',[StudentController::class,'destroy']);
 
 
 // instructor
-Route::put('/instructor/{id}',[InstructorController::class,'update']);
+// Route::put('/instructor/{id}',[InstructorController::class,'update']);
 Route::get('/instructor/sections/{id}',[InstructorController::class,'showSections']);
 Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
+Route::get('/instructors',[InstructorController::class, 'index']);
+// Route::get('/instructor/{id}',[InstructorController::class, 'show']);
+Route::post('/instructor/register',[InstructorAuthController::class, 'register']);
+Route::post('/instructor/login',[InstructorAuthController::class, 'login']);
+// Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']); // protected 
 // end of instructor
 
 // admin
@@ -83,11 +88,8 @@ Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
     Route::post('/admin/login',[AdminAuthController::class, 'login']);
     Route::post('/admin/logout',[AdminAuthController::class, 'logout']); // protected 
 
-    //instructor
-    Route::get('/instructors',[InstructorAuthController::class, 'index']);
-    Route::post('/instructor/register',[InstructorAuthController::class, 'register']);
-    Route::post('/instructor/login',[InstructorAuthController::class, 'login']);
-    Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']); // protected 
+
+ 
 // end of authentication
 
 // absence 
@@ -100,5 +102,10 @@ Route::delete('student/absence',[AbsenceController::class,'destroy']);
 /* protected */
 
 Route::group(['middleware'=>['auth:sanctum']], function () {
+    // instructor 
+    Route::get('/instructor',[InstructorController::class, 'show']);
+    Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']);
+    Route::put('/instructor',[InstructorController::class,'update']);
+    //
     Route::get('/sections',[SectionController::class,'index']);
 });
