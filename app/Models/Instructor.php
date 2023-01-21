@@ -16,4 +16,7 @@ class Instructor extends Model
     protected $fillable = [
         'instructor_id','instructor_name','email','is_admin','phone_number','password' 
      ];
+     protected $casts = [
+        'instructor_id' => 'string',
+    ];
 }

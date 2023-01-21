@@ -42,8 +42,8 @@ class InstructorController extends Controller
     {
         $user = Auth::guard('sanctum')->user();
         $instructor_id = $user->instructor_id;
-            $instructor = Instructor::Where('instructor_id',$instructor_id)->get(['instructor_id','instructor_name','email','phone_number']);
-            if(count($instructor)>0){
+            $instructor = Instructor::Where('instructor_id',$instructor_id)->first(['instructor_id','instructor_name','email','phone_number']);
+            if($instructor){
                 return $instructor;
             }
             else {
@@ -93,7 +93,7 @@ class InstructorController extends Controller
             $validatedData = $request->validate([
                 'instructor_name' => 'sometimes|string|max:50',
                 'email' => 'sometimes|string|email|max:50',
-                'phone_number' => 'sometimes|string|max:15',
+                'phone_number' => 'sometimes|string|nullable|max:15',
                 'password' => 'sometimes|string|min:3|confirmed',
                 'old_password' => 'required_with:password|string'
             ]);
