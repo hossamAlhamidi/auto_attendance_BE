@@ -45,7 +45,8 @@ class AbsenceController extends Controller
         }
         $now = now();
         try{
-            $absence= DB::insert("insert into absences (student_id, section_id,created_at,updated_at) values ($var[student_id], $var[section_id],'$now','$now')");
+            // $absence= DB::insert("insert into absences (student_id, section_id,created_at,updated_at) values ($var[student_id], $var[section_id],'$now','$now')");
+            DB::insert("insert into absences (student_id, section_id,created_at,updated_at) values ($var[student_id], $var[section_id],'$now','$now')");
             $student->number_of_absence = $student->number_of_absence + 1 ;
             DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->update(['number_of_absence' => $student->number_of_absence]);
         }
