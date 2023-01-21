@@ -26,7 +26,7 @@ class InstructorAuthController extends Controller
             'instructor_id' => 'required|string|unique:instructors,instructor_id',
             'instructor_name' => 'required|string',
             'email' => 'email|unique:instructors,email',
-            'phone_number' => 'string',
+            'phone_number' => 'string|nullable',
             // 'password' => 'required|string|confirmed'
         ]);
 
