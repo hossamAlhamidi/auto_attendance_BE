@@ -44,12 +44,13 @@ class AbsenceController extends Controller
             );
         }
         $now = now();
+        $today = Carbon::now()->format('Y-m-d');
         try{
-            $absence= DB::insert("insert into absences (student_id, section_id,created_at,updated_at) values ($var[student_id], $var[section_id],'$now','$now')");
+            $absence= DB::insert("insert into absences (student_id, section_id, absence_date,created_at,updated_at) values ($var[student_id], $var[section_id],'$today','$now','$now')");
 
         }
         catch (\Throwable $th) {
-            return response(['message'=>'Error, could not add the absence'], 400);
+            return response(['message'=>$th], 400);
         }
 
         return response('absence is added', 201);
