@@ -96,6 +96,8 @@ Route::post('/instructor/login',[InstructorAuthController::class, 'login']);
 Route::get('student/absence/{id}',[AbsenceController::class,'show']);
 Route::post('student/absence',[AbsenceController::class,'store']);
 Route::delete('student/absence',[AbsenceController::class,'destroy']);
+Route::get('student/absence/history/{id}/{day}',[AbsenceController::class,'AbsenceHistory']);
+Route::post('student/absence/multi',[AbsenceController::class,'multiAbsence']);
 
 
 
