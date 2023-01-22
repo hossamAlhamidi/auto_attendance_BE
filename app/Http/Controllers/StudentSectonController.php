@@ -162,7 +162,9 @@ class StudentSectonController extends Controller
         {
             return response()->json(['massage' => 'There is no student with this ID in this section'], 400);
         }
-        
+
+        DB::table('absences')->where('student_id', $var['student_id'])->where('section_id', $var['section_id'])->delete();
+
         $student->delete();
 
         return response()->json(['massage' => 'Delete Success'], 200);

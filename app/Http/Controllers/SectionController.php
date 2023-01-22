@@ -301,43 +301,4 @@ class SectionController extends Controller
         // return response($response, 200); 
         return $response; 
     }
-
-
-    // public function FindStudentForInstructor(Request $request)
-    // {
-        // $instructor_id = $request->instructor_id;
-        // $student_id = $request->student_id;
-
-        // $students = (new SectionController)->FindStudentsForInstructor($instructor_id);
-        // $students = $this->FindStudentsForInstructor($instructor_id);
-        // $students = json_decode($this->FindStudentsForInstructor($instructor_id), true);
-
-        // $Astudent = [];
-        // foreach($students as $student)
-        // {
-        //     foreach ($student as $value) {
-        //         if($value['student_id'] == $student_id)
-        //         {
-        //             $Astudent[] = $student->where('student_id', $student_id);
-        //             break;
-        //         }
-        //     }
-        //     if(count($Astudent)>0)
-        //     {
-        //         break;
-        //     }
-        // }
-
-
-        // if(!$students)
-        // {
-        //     return response(['message' => 'No student found with this ID'], 400);
-        // }
-
-        // return response($response, 200); 
-        // return response()->json([
-        //     'success' => true,
-        //     'data' => $students
-        // ],200);
-    // }
 }
