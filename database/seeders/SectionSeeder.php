@@ -34,7 +34,7 @@ class SectionSeeder extends Seeder
                 'instructor_name' => $instructor->instructor_name,
                 'classroom' => random_int(1,99),
                 'time' => NULL, 
-                'type' => Arr::random($type, 1), 
+                'type' => Arr::random($type), 
                 'created_at' => now(),
                 'updated_at' => now()
             ];
