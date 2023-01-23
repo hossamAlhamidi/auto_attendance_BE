@@ -71,14 +71,16 @@ class AbsenceController extends Controller
 
     public function multiAbsence(Request $request)
     {
-        // $var = $request->validate([
-        //     'section_id'=>'required|max:7',
-        //     'students_ids'=>'required'
+        $var = $request->validate([
+            'section_id'=>'required|max:7',
+            'students_ids'=>'required|array'
 
-        // ]);
+        ]);
 
-        $section_id = $request->section_id;
-        $students_ids = $request->student_id;
+        $section_id = $var['section_id'];
+        $students_ids = $var['students_ids'];
+
+        // return $section_id;
         
         $students = DB::table('student__sections')->where('section_id', $section_id)->whereIn('student_id', $students_ids)->get();
 
@@ -172,7 +174,7 @@ class AbsenceController extends Controller
         // $all_absence_students = Absence::where('section_id', $section_id)->where('absence_date', $day)->get();
         $all_absence_students = DB::table('absences')->where('section_id', $section_id)->where('absence_date', $day)->get();
 
-        // return $all_students;
+        // return $all_absence_students;
 
         if($all_students->isEmpty())
         {
@@ -181,6 +183,7 @@ class AbsenceController extends Controller
 
         $students = [];
         $absence = false;
+        $var = [];
 
         foreach($all_students as $student)
         {
@@ -199,8 +202,8 @@ class AbsenceController extends Controller
                         'absence' => $absence
                     ];
 
-                    $students[] = $var;
                 }
+                $students[] = $var;
             } else{
                 $var = [
                     'student_id' => $student->student_id,
