@@ -33,10 +33,10 @@ class SectionController extends Controller
         $var = $request->validate([
             'section_id' => 'required',
             'course_id' => 'required',
-            // 'instructor_id' => 'required',
-            // 'instructor_name'=>'required',
-            // 'classroom'=>'required',
-            // 'time'=>'required'
+            'instructor_id' => 'required',
+            'instructor_name'=>'required',
+            'classroom'=>'required',
+            'time'=>'required'
         ]);
 
         $section = Section::where('section_id', $var['section_id'])->first();
@@ -167,7 +167,7 @@ class SectionController extends Controller
     public function show($id)
     {
         // return Section::Exttransfer()->where('section_id',$id)->get();
-        return Section::Where('section_id', $id)->get();
+        return Section::Where('section_id', $id)->first();
     }
 
     /**
@@ -177,19 +177,54 @@ class SectionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        // print_r($request->all()); 
-        $section = Section::Where('section_id', $id)->update([
-            'section_id' => $request->section_id,
-            'course_id' => $request->course_id,
-            'instructor_id' => $request->instructor_id,
-            // section name or instructor name is missing
-            'classroom' => $request->classroom,
-            'time' => $request->time
+       
+
+        $data = $request->all();
+
+         $request->validate([
+            'section_id'=>'required',
+            'instructor_id' => 'required',
+            'instructor_name' => 'required|string',
+            'classroom' => 'required|string',
+            'time' => 'required',
         ]);
-        // $section->update(['section_id'=>$id]);
-        return [$section];
+        if (is_string($request->time) && json_decode($request->time) != null) {
+            $decoded_time = json_decode($request->time);
+            $sunday = isset($decoded_time->sunday) ? $decoded_time->sunday : "-";
+            $monday = isset($decoded_time->monday) ? $decoded_time->monday : "-";
+            $tuesday = isset($decoded_time->tuesday) ? $decoded_time->tuesday : "-";
+            $wednesday = isset($decoded_time->wednesday) ? $decoded_time->wednesday : "-";
+            $thursday = isset($decoded_time->thursday) ? $decoded_time->thursday : "-";
+        
+            $validatedData = [
+                'instructor_id' => $request->instructor_id,
+                'instructor_name' => $request->instructor_name,
+                'classroom' => $request->classroom,
+                'time' => [
+                    "sunday" => $sunday,
+                    "monday" => $monday,
+                    "tuesday" => $tuesday,
+                    "wednesday" => $wednesday,
+                    'thursday' => $thursday
+                ],
+            ];
+        } else {
+            $validatedData = [
+                'instructor_id' => $request->instructor_id,
+                'instructor_name' => $request->instructor_name,
+                'classroom' => $request->classroom,
+                'time' => $request->time,
+            ];
+        }
+        $update = DB::table('sections')->where('section_id', $data['section_id'])->update($validatedData);
+    
+        if($update) {
+            return response(['message' => 'Record updated successfully']);
+        } else {
+            return response(['message' => 'Error updating record']);
+        }
     }
 
     /**

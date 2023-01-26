@@ -91,8 +91,8 @@ class InstructorController extends Controller
             $instructor = Instructor::findOrFail($instructor_id);
             
             $validatedData = $request->validate([
-                'instructor_name' => 'sometimes|string|max:50',
-                'email' => 'sometimes|string|email|max:50',
+                'instructor_name' => 'required|string|max:50',
+                'email' => 'required|string|email|max:50',
                 'phone_number' => 'sometimes|string|nullable|max:15',
                 'password' => 'sometimes|string|min:3|confirmed',
                 'old_password' => 'required_with:password|string'
