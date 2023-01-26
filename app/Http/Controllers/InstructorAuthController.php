@@ -23,7 +23,7 @@ class InstructorAuthController extends Controller
     public function register(request $request)
     {
         $var = $request->validate([
-            'instructor_id' => 'required|string|unique:instructors,instructor_id',
+            'instructor_id' => 'required|Int|unique:instructors,instructor_id|max:12',
             'instructor_name' => 'required|string',
             'email' => 'email|unique:instructors,email',
             'phone_number' => 'string|nullable',
