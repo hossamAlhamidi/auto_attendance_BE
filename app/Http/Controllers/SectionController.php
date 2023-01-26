@@ -200,14 +200,49 @@ class SectionController extends Controller
      */
     public function destroy($id)
     {
-        $section =  Section::where('section_id', $id);
+        // $section =  Section::where('section_id', $id);
+        $section = DB::table('sections')->join('courses', 'sections.course_id', '=', 'courses.course_id')
+            ->where('section_id', $id);
 
         if (!$section->first()) 
         {
-            return response()->json(['message' => "section is not found"], 404);
+            return response()->json(['message' => "Section is not found"], 404);
         }
+
+        $section_data = $section->first();
+
+        if($section_data->type != 'lucture'){
+            $section->delete();
+            return response()->json(['message' => 'Section is deleted'], 200);
+        }
+
+        if($section_data->has_tutorial == 1)
+        {  
+            $tutorial = Section::where('section_id', $section_data->section_id+1);
+        }
+        if($section_data->has_lab == 1)
+        {  
+            $lab = Section::where('section_id', $section_data->section_id+2);
+        }
+
+        if($tutorial->first())
+        {
+            // return response()->json(['message' => "Tutorial for this Lucture can't be found"], 404);
+            $tutorial->delete();
+        }
+        if($lab->first())
+        {
+            // return response()->json(['message' => "Lab for this Lucture can't be found"], 404);
+            $lab->delete();
+        }
+
+        // $tutorial->delete();
+        // $lab->delete();
         $section->delete();
-        return response(['message' => 'section is deleted'], 200);
+
+        return response(
+            ['message' => 'sections are deleted']
+            , 200);
     }
 
     public function search($name)

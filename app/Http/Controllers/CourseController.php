@@ -35,25 +35,33 @@ class CourseController extends Controller
             'course_name' => 'required|string',
             'abbreviation' => 'required|string',
             'course_hours' => 'required|int',
-
             'has_tutorial' => '',
             'has_lab' => ''
 
             // 'classroom'=>'int|nuallable',
             // 'time'=>'required'
-         ]);
+        ]);
 
-         $course = Course::create([
-            'course_id' => $var['abbreviation'] . ' ' . $var['course_id'],
+        $course_id = $var['abbreviation'] . ' ' . $var['course_id'];
+
+        if(Course::where('course_id', $course_id)->first())
+        {
+            return response()->json(
+                ['message' => 'Course already exit']
+                ,400);
+        }
+
+        $course = Course::create([
+            'course_id' => $course_id,
             'course_name' => $var['course_name'],
             'course_hours' => $var['course_hours'],
             'has_tutorial'=>$var['has_tutorial'],
             'has_lab'=>$var['has_lab']
-         ]);
+        ]);
          
-         if(!$course)
+        if(!$course)
             return response(['message' => 'Error, coudle not add the course'], 400);
-         else
+        else
             return response(['message' => 'The course was add'], 201);
          
 
@@ -68,7 +76,7 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        //
+        return Course::where('course_id', $id)->first();
     }
 
     /**

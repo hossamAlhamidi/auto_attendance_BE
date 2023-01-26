@@ -17,7 +17,7 @@ class SectionSeeder extends Seeder
     public function run()
     {
         $sections = [];
-        $type = ['lucture', 'lap', 'tutorial'];
+        $type = ['lucture', 'lab', 'tutorial'];
         $courses = DB::table('courses')->get();
         $instructors = DB::table('instructors')->get();
 
