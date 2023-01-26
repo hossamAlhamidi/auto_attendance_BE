@@ -69,8 +69,7 @@ Route::get('/instructor/sections/{id}',[InstructorController::class,'showSection
 Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
 Route::get('/instructors',[InstructorController::class, 'index']);
 // Route::get('/instructor/{id}',[InstructorController::class, 'show']);
-Route::post('/instructor/register',[InstructorAuthController::class, 'register']);
-Route::post('/instructor/login',[InstructorAuthController::class, 'login']);
+
 // Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']); // protected 
 // end of instructor
 
@@ -88,7 +87,9 @@ Route::post('/instructor/login',[InstructorAuthController::class, 'login']);
     Route::post('/admin/login',[AdminAuthController::class, 'login']);
     Route::post('/admin/logout',[AdminAuthController::class, 'logout']); // protected 
 
-
+    //instructor
+    Route::post('/instructor/register',[InstructorAuthController::class, 'register']);
+    Route::post('/instructor/login',[InstructorAuthController::class, 'login']);
  
 // end of authentication
 
