@@ -12,6 +12,8 @@ use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\InstructorAuthController;
 use App\Http\Controllers\AbsenceController;
+use App\Http\Controllers\DashboardController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -99,6 +101,14 @@ Route::post('student/absence',[AbsenceController::class,'store']);
 Route::delete('student/absence',[AbsenceController::class,'destroy']);
 Route::get('student/absence/history/{id}/{day}',[AbsenceController::class,'AbsenceHistory']);
 Route::post('student/absence/multi',[AbsenceController::class,'multiAbsence']);
+// end of absence 
+
+// dashboard
+Route::get('dashboard/courses/{number?}',[DashboardController::class,'MostRegisteredCourses']);
+Route::get('dashboard/section/{number?}',[DashboardController::class,'MostAbsenceInSection']);
+Route::get('dashboard/instructor/{number?}',[DashboardController::class,'MostInstructorTeaching']);
+Route::get('dashboard/absence/{number?}',[DashboardController::class,'NumberOfAbsence']);
+//end of dashboard
 
 
 
@@ -109,6 +119,9 @@ Route::group(['middleware'=>['auth:sanctum']], function () {
     Route::get('/instructor',[InstructorController::class, 'show']);
     Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']);
     Route::put('/instructor',[InstructorController::class,'update']);
-    //
+
+    // section
     Route::get('/sections',[SectionController::class,'index']);
+
+    // dashboard
 });

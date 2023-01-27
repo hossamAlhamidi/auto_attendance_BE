@@ -9,7 +9,6 @@ use App\Models\Course;
 use App\Models\Section;
 use App\Models\Student_Section;
 
-
 class AbsenceController extends Controller
 {
     /**

@@ -9,6 +9,7 @@ use App\Models\Student_Section;
 use App\Models\Section;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+
 class InstructorController extends Controller
 {
     /**
