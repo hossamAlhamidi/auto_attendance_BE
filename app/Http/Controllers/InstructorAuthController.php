@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\HasApiTokens;;
 use Illuminate\Support\Facades\Auth;
+
 class InstructorAuthController extends Controller
 {
 

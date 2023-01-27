@@ -8,29 +8,52 @@ use App\Models\Student;
 use App\Models\Section;
 use App\Models\Course;
 use App\Models\Instructor;
-use App\Models\Student_Course;
+use App\Models\StudentCourse;
 use App\Models\Absence;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function MostRegisteredCourses(Request $request)
+    public function MostRegisteredCourses($number = 5)
     {
-        # code...
+        // return StudentCourse::groupBy('course_id')->count();
+        $var = DB::table('student_courses')->select('course_id', DB::raw('count(*) as number'))->groupBy('course_id')->orderByDesc('number')->orderBy('course_id', 'asc')->simplePaginate($number);
+        $response = $var->toArray();
+        return response()->json($response['data'],200);
     }
 
-    public function MostAbsenceInSection(Request $request)
+    public function MostAbsenceInSection($number = 5)
     {
-        # code...
+        $var = DB::table('absences')->select('section_id', DB::raw('count(*) as number'))->groupBy('section_id')->orderByDesc('number')->orderBy('section_id', 'asc')->simplePaginate($number);
+        $response = $var->toArray();
+        return response()->json($response['data'],200);
     }
 
-    public function MostInstructorTeaching(Request $request)
+    public function MostInstructorTeaching($number = 5)
     {
-        # code...
+        $var = DB::table('sections')->select('instructor_id', DB::raw('count(*) as number'))->groupBy('instructor_id')->orderByDesc('number')->orderBy('instructor_id', 'asc')->simplePaginate($number);
+        $response = $var->toArray();
+        return response()->json($response['data'],200);
     }
 
-    public function NumberOfAbsence(Request $request)
+    public function NumberOfAbsence($number = 5)
     {
-        # code...
+        $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->groupBy('absence_date')->orderByDesc('number')->orderByDesc('absence_date')->simplePaginate($number);
+        $absences_array = $absences->toArray();
+        
+        $response = [];
+        
+        foreach ($absences_array['data'] as $absence) 
+        {
+            $var = [
+                'absence_date' => $absence->absence_date,
+                'day' => Carbon::createFromFormat('Y-m-d', $absence->absence_date)->format('l'),
+                'number' => $absence->number
+            ];
+            $response[] = $var;
+        }
+
+        return response()->json($response,200);
     }
 }
 

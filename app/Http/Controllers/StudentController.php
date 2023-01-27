@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Models\Section;
 use App\Models\Student_Section;
+
 class StudentController extends Controller
 {
     /**
