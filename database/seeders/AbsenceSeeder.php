@@ -5,8 +5,11 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
-class Student_SectionSeeder extends Seeder
+class AbsenceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,30 +18,32 @@ class Student_SectionSeeder extends Seeder
      */
     public function run()
     {
-        $student_sections = [];
+        $faker = Faker::create();
+        $startDate = Carbon::now()->subYears(1);
+        $endDate = Carbon::now()->addMonths(5);
+
+        $randomDate = $faker->dateTimeBetween($startDate, $endDate);
+        $formattedDate = Carbon::parse($randomDate)->format('Y-m-d');
+
+        $absences = [];
         $students = DB::table('students')->get();
         $sections = DB::table('sections')->get();
-        
 
-        foreach (range(1,10) as $student_section) {
+        foreach (range(1,50) as $absence) {
             
             $student = $students->random();
             $section = $sections->random();
-            $absences = DB::table('absences')->where('student_id' , $student->student_id)->count();
-    
-            $percentage = ($absences / 33) * 100;
 
-            $student_section = [
+            $absence = [
                 'student_id' => $student->student_id,
                 'section_id' => $section->section_id,
-                'absence_percentage' => $percentage, 
-                'number_of_absence' => $absences, 
+                'absence_date' => $formattedDate, 
                 'created_at' => now(),
                 'updated_at' => now()
             ];
-            $student_sections[] = $student_section; 
+            $absences[] = $absence; 
         }
 
-        DB::table('student__sections')->insert($student_sections);
+        DB::table('absences')->insert($absences);
     }
 }

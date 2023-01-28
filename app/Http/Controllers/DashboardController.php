@@ -11,6 +11,7 @@ use App\Models\Instructor;
 use App\Models\StudentCourse;
 use App\Models\Absence;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
@@ -42,33 +43,61 @@ class DashboardController extends Controller
         // $var = DB::table('absences')->select('section_id', DB::raw('count(*) as number'))->groupBy('section_id')->orderByDesc('number')->orderBy('section_id', 'asc')->simplePaginate($number);
         // $response = $var->toArray();
         // return response()->json($response['data'],200);
-        $var = DB::table('absences')->select('section_id', DB::raw('count(*) as number'))->groupBy('section_id')->orderByDesc('number')->orderBy('section_id', 'asc')->take($number)->get();
+        $var = DB::table('absences')->select('section_id', DB::raw('count(*) as number'))->groupBy('section_id')->
+                orderByDesc('number')->orderBy('section_id', 'asc')->take($number)->get();
    
         return response()->json($var,200);
     }
 
     public function MostInstructorTeaching($number = 5)
     {
-        $var = DB::table('sections')->select('instructor_name', DB::raw('count(*) as number'))->groupBy('instructor_name')->orderByDesc('number')->orderBy('instructor_name', 'asc')->take($number)->get();
+        $var = DB::table('sections')->select('instructor_name', DB::raw('count(*) as number'))->groupBy('instructor_name')->
+                orderByDesc('number')->orderBy('instructor_name', 'asc')->take($number)->get();
         return response()->json($var,200);
         
     }
 
-    public function NumberOfAbsence($number = 5)
+    public function NumberOfAbsence($number = 5, $from = null, $to = null) // 
     {
-        $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->groupBy('absence_date')->orderByDesc('number')->orderByDesc('absence_date')->simplePaginate($number);
+        // $var = [
+        //     'number' => $number,
+        //     'from' => $from,
+        //     'to' => $to,
+        // ];
+        // $validator = Validator::make($var, [
+        //     'number' => 'numeric',
+        //     'from' => '',
+        //     'to' => ''
+        // ],);
+        // if ($validator->fails()) {
+        //     return response()->json(['error' => $validator->errors()], 400);
+        // }
+
+        if($from != null && $to != null)
+        {        
+            $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->whereBetween('absence_date', [$from, $to])->
+                    groupBy('absence_date')->orderByDesc('number')->orderByDesc('absence_date')->take($number)->get();
+            // return $absences;
+        }else if($from != null && $to == null) {
+            $to = Carbon::now()->format('Y-m-d');
+            $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->whereBetween('absence_date', [$from, $to])->
+                    groupBy('absence_date')->orderByDesc('number')->orderByDesc('absence_date')->take($number)->get();
+        }else {
+            $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->
+                    groupBy('absence_date')->orderByDesc('number')->orderByDesc('absence_date')->take($number)->get();
+        }
         $absences_array = $absences->toArray();
         
         $response = [];
         
-        foreach ($absences_array['data'] as $absence) 
+        foreach ($absences_array as $absence) 
         {
-            $var = [
+            $temp = [
                 'absence_date' => $absence->absence_date,
                 'day' => Carbon::createFromFormat('Y-m-d', $absence->absence_date)->format('l'),
                 'number' => $absence->number
             ];
-            $response[] = $var;
+            $response[] = $temp;
         }
 
         return response()->json($response,200);

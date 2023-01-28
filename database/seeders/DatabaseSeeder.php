@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             InstructorSeeder::class,
             CourseSeeder::class,
             SectionSeeder::class,
+            AbsenceSeeder::class,
             Student_sectionSeeder::class,
             Student_CourseSeeder::class,
         ]);
