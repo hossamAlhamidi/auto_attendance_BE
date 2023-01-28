@@ -16,9 +16,25 @@ class DashboardController extends Controller
 {
     public function MostRegisteredCourses($number = 5)
     {
-        // return StudentCourse::groupBy('course_id')->count();
-        $var = DB::table('student_courses')->select('course_id', DB::raw('count(*) as number'))->groupBy('course_id')->orderByDesc('number')->orderBy('course_id', 'asc')->take($number)->get();
-        return response()->json($var,200);
+        $section_arr = DB::table('student__sections')->pluck('section_id');
+       
+        $temp = DB::table('student__sections')
+                 ->join('sections', 'student__sections.section_id', '=', 'sections.section_id')
+                 ->select('sections.course_id', DB::raw('count(*) as number'))
+                 ->groupBy('sections.course_id')
+                 ->orderByDesc('number')
+                 ->orderBy('sections.course_id', 'asc')
+                 ->take($number)
+                 ->get();
+        
+        $result = $temp->groupBy('course_id')->map(function($courseData) {
+                    return [
+                        'course_id' => $courseData[0]->course_id,
+                        'number' => $courseData->sum('number')
+                    ];
+                });
+        
+                return response()->json($result->values(),200);
     }
 
     public function MostAbsenceInSection($number = 5)
