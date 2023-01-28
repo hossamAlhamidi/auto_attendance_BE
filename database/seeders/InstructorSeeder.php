@@ -24,12 +24,12 @@ class InstructorSeeder extends Seeder
             $password = Str::random(10);
             $first_name = $faker->firstName();
             $instructor = [
-                'instructor_id' => $first_name . random_int(1,9999),
+                'instructor_id' => $faker->unique()->randomNumber,
                 'instructor_name' => $first_name . ' ' . $faker->lastName(),
                 'email' => $faker->email(),
                 'phone_number' => $faker->phoneNumber(),
                 'is_admin' => random_int(0,1),
-                'password' => $password,
+                'password' => bcrypt($password),
                 'remember_token' => $password, 
                 'created_at' => now(),
                 'updated_at' => now()
