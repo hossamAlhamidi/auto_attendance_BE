@@ -40,12 +40,12 @@ class DashboardController extends Controller
 
     public function NumberOfAbsence($number = 5)
     {
-        $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->groupBy('absence_date')->orderByDesc('number')->orderByDesc('absence_date')->simplePaginate($number);
+        $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->groupBy('absence_date')->orderByDesc('number')->orderByDesc('absence_date')->take($number)->get();
         $absences_array = $absences->toArray();
         
         $response = [];
         
-        foreach ($absences_array['data'] as $absence) 
+        foreach ($absences_array as $absence) 
         {
             $var = [
                 'absence_date' => $absence->absence_date,
