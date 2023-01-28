@@ -107,7 +107,7 @@ Route::post('student/absence/multi',[AbsenceController::class,'multiAbsence']);
 Route::get('dashboard/courses/{number?}',[DashboardController::class,'MostRegisteredCourses']);
 Route::get('dashboard/section/{number?}',[DashboardController::class,'MostAbsenceInSection']);
 Route::get('dashboard/instructor/{number?}',[DashboardController::class,'MostInstructorTeaching']);
-Route::get('dashboard/absence/{number?}',[DashboardController::class,'NumberOfAbsence']);
+Route::get('dashboard/absence/{number?}/{from?}/{to?}',[DashboardController::class,'NumberOfAbsence']);
 //end of dashboard
 
 
