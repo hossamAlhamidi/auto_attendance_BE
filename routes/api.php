@@ -41,6 +41,7 @@ Route::get('/sections/instructor/students/{instructor_id}/{student_id?}',[Sectio
 // courses 
 Route::get('/courses',[CourseController::class,'index']);
 Route::post('/courses',[CourseController::class,'store']); //protected
+Route::put('/courses',[CourseController::class,'update']);
 Route::delete('/courses/{id}',[CourseController::class,'destroy']);
 // end of courses
 
