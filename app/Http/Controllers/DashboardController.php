@@ -102,5 +102,19 @@ class DashboardController extends Controller
 
         return response()->json($response,200);
     }
+
+    public function count(){
+        $students_count = DB::table('students')->count();
+        $instructors_count = DB::table('instructors')->count();
+        $sections_count = DB::table('sections')->count();
+        $courses_count = DB::table('courses')->count();
+        
+        return response()->json([
+            'students_count' => $students_count,
+            'instructors_count' => $instructors_count,
+            'sections_count' => $sections_count,
+            'courses_count' => $courses_count,
+        ]);
+    }
 }
 

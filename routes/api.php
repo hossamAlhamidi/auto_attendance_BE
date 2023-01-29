@@ -109,6 +109,7 @@ Route::get('dashboard/courses/{number?}',[DashboardController::class,'MostRegist
 Route::get('dashboard/section/{number?}',[DashboardController::class,'MostAbsenceInSection']);
 Route::get('dashboard/instructor/{number?}',[DashboardController::class,'MostInstructorTeaching']);
 Route::get('dashboard/absence/{number?}/{from?}/{to?}',[DashboardController::class,'NumberOfAbsence']);
+Route::get('dashboard/count',[DashboardController::class,'count']);
 //end of dashboard
 
 
