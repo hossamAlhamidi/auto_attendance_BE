@@ -104,10 +104,10 @@ class DashboardController extends Controller
     }
 
     public function count(){
-        $students_count = DB::table('students')->count();
-        $instructors_count = DB::table('instructors')->count();
-        $sections_count = DB::table('sections')->count();
-        $courses_count = DB::table('courses')->count();
+        $students_count = DB::table('students')->count('student_id');
+        $instructors_count = DB::table('instructors')->count('instructor_id');
+        $sections_count = DB::table('sections')->count('section_id');
+        $courses_count = DB::table('courses')->count('course_id');
         
         return response()->json([
             'students_count' => $students_count,
