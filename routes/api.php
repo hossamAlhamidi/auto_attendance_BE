@@ -28,7 +28,7 @@ use App\Http\Controllers\DashboardController;
 /* public */
 // sections
 // Route::get('/sections',[SectionController::class,'index']);
-Route::post('/sections',[SectionController::class,'store']); //protected
+// Route::post('/sections',[SectionController::class,'store']); //protected
 Route::get('/sections/{id}',[SectionController::class,'show']);
 Route::get('/sections/search/{name}',[SectionController::class,'search']);
 Route::delete('/sections/{id}',[SectionController::class,'destroy']); 
@@ -68,7 +68,7 @@ Route::put('/students/{id}',[StudentController::class,'update']);
 // instructor
 // Route::put('/instructor/{id}',[InstructorController::class,'update']);
 Route::get('/instructor/sections/{id}',[InstructorController::class,'showSections']);
-Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
+// Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
 Route::get('/instructors',[InstructorController::class, 'index']);
 // Route::get('/instructor/{id}',[InstructorController::class, 'show']);
 
@@ -104,10 +104,10 @@ Route::post('student/absence/multi',[AbsenceController::class,'multiAbsence']);
 // end of absence 
 
 // dashboard
-Route::get('dashboard/courses/{number?}',[DashboardController::class,'MostRegisteredCourses']);
-Route::get('dashboard/section/{number?}',[DashboardController::class,'MostAbsenceInSection']);
-Route::get('dashboard/instructor/{number?}',[DashboardController::class,'MostInstructorTeaching']);
-Route::get('dashboard/absence/{number?}/{from?}/{to?}',[DashboardController::class,'NumberOfAbsence']);
+// Route::get('dashboard/courses/{number?}',[DashboardController::class,'MostRegisteredCourses']);
+// Route::get('dashboard/section/{number?}',[DashboardController::class,'MostAbsenceInSection']);
+// Route::get('dashboard/instructor/{number?}',[DashboardController::class,'MostInstructorTeaching']);
+// Route::get('dashboard/absence/{number?}/{from?}/{to?}',[DashboardController::class,'NumberOfAbsence']);
 //end of dashboard
 
 
