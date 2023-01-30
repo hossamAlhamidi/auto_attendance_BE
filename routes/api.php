@@ -31,8 +31,8 @@ use App\Http\Controllers\DashboardController;
 Route::post('/sections',[SectionController::class,'store']); //protected
 Route::get('/sections/{id}',[SectionController::class,'show']);
 Route::get('/sections/search/{name}',[SectionController::class,'search']);
-Route::delete('/sections/{id}',[SectionController::class,'destroy']); //protected
-Route::put('/sections',[SectionController::class,'update']); //protected
+Route::delete('/sections/{id}',[SectionController::class,'destroy']); 
+Route::put('/sections',[SectionController::class,'update']); 
 Route::get('/sections/instructor/{id}',[SectionController::class,'FindSectionInstrctor']);
 Route::get('/sections/instructor/students/{instructor_id}/{student_id?}',[SectionController::class,'FindStudentForInstructor']);
 
@@ -40,7 +40,7 @@ Route::get('/sections/instructor/students/{instructor_id}/{student_id?}',[Sectio
 
 // courses 
 Route::get('/courses',[CourseController::class,'index']);
-Route::post('/courses',[CourseController::class,'store']); //protected
+Route::post('/courses',[CourseController::class,'store']); 
 Route::delete('/courses/{id}',[CourseController::class,'destroy']);
 // end of courses
 
@@ -59,9 +59,9 @@ Route::delete('/students/sections',[StudentSectonController::class,'destroy']);
 // Route::get('/students/{id}',[StudentController::class,'show']);
 Route::post('/students',[StudentController::class,'show']);
 Route::get('/students/{student_id}/{instructor_id?}',[StudentController::class,'showGet']);
-Route::put('/students/{id}',[StudentController::class,'update']);
 Route::get('/students',[StudentController::class,'index']);
 Route::delete('/students/{id}',[StudentController::class,'destroy']);
+Route::put('/students/{id}',[StudentController::class,'update']);
 // end of students 
 
 
@@ -119,9 +119,26 @@ Route::group(['middleware'=>['auth:sanctum']], function () {
     Route::get('/instructor',[InstructorController::class, 'show']);
     Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']);
     Route::put('/instructor',[InstructorController::class,'update']);
+    // Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
+
+    //student
+    // Route::delete('/students/{id}',[StudentController::class,'destroy']);
+    // Route::put('/students/{id}',[StudentController::class,'update']);
 
     // section
     Route::get('/sections',[SectionController::class,'index']);
+    // Route::post('/sections',[SectionController::class,'store']); 
+    // Route::put('/sections',[SectionController::class,'update']);
+    // Route::delete('/sections/{id}',[SectionController::class,'destroy']); 
+
+
+    //course
+    // Route::post('/courses',[CourseController::class,'store']); 
+    // Route::delete('/courses/{id}',[CourseController::class,'destroy']);
 
     // dashboard
-});
+    // Route::get('dashboard/courses/{number?}',[DashboardController::class,'MostRegisteredCourses']);
+    // Route::get('dashboard/section/{number?}',[DashboardController::class,'MostAbsenceInSection']);
+    // Route::get('dashboard/instructor/{number?}',[DashboardController::class,'MostInstructorTeaching']);
+    // Route::get('dashboard/absence/{number?}/{from?}/{to?}',[DashboardController::class,'NumberOfAbsence']);
+    });
