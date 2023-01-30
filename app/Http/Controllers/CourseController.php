@@ -85,9 +85,28 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        try {
+            $data = request()->validate([
+                'course_id' => 'required',
+                'course_name' => 'required|string',
+                'course_hours' => 'required|integer',
+            ]);
+            $course = Course::findOrFail($data['course_id']);
+            $updated = $course->update([
+                'course_name' => $data['course_name'],
+                'course_hours' => $data['course_hours'],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    
+        if (!$updated) {
+            return response()->json(['message' => 'No changes made to course.'], 200);
+        }
+    
+        return response()->json(['message' => 'Course updated successfully.'], 200);
     }
 
     /**

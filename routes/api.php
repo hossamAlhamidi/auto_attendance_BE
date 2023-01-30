@@ -40,12 +40,7 @@ Route::get('/sections/instructor/students/{instructor_id}/{student_id?}',[Sectio
 
 // courses 
 Route::get('/courses',[CourseController::class,'index']);
-Route::post('/courses',[CourseController::class,'store']); 
 Route::delete('/courses/{id}',[CourseController::class,'destroy']);
-// end of courses
-
-// students sections 
-Route::get('/section/students/{id}',[StudentSectonController::class,'sectionStudentsList']);
 Route::get('/students/sections/{id}',[StudentSectonController::class,'showStudentsSections']);
 Route::post('/students/sections',[StudentSectonController::class,'store']);
 Route::post('/students/sections/all',[StudentSectonController::class,'storeAll']);
@@ -104,10 +99,11 @@ Route::post('student/absence/multi',[AbsenceController::class,'multiAbsence']);
 // end of absence 
 
 // dashboard
-// Route::get('dashboard/courses/{number?}',[DashboardController::class,'MostRegisteredCourses']);
-// Route::get('dashboard/section/{number?}',[DashboardController::class,'MostAbsenceInSection']);
-// Route::get('dashboard/instructor/{number?}',[DashboardController::class,'MostInstructorTeaching']);
-// Route::get('dashboard/absence/{number?}/{from?}/{to?}',[DashboardController::class,'NumberOfAbsence']);
+Route::get('dashboard/courses/{number?}',[DashboardController::class,'MostRegisteredCourses']);
+Route::get('dashboard/section/{number?}',[DashboardController::class,'MostAbsenceInSection']);
+Route::get('dashboard/instructor/{number?}',[DashboardController::class,'MostInstructorTeaching']);
+Route::get('dashboard/absence/{number?}/{from?}/{to?}',[DashboardController::class,'NumberOfAbsence']);
+Route::get('dashboard/count',[DashboardController::class,'count']);
 //end of dashboard
 
 
