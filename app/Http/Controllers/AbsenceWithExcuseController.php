@@ -52,4 +52,13 @@ class AbsenceWithExcuseController extends Controller
 
         return response(['massage' => 'excuse is added'], 201);
     }
+
+
+    public function show($student_id)
+    {
+        
+        $result = DB::select(DB::raw("SELECT * FROM `absence_with_excuses`,`sections` where sections.section_id = absence_with_excuses.section_id and student_id = $student_id "));
+        return $result;
+    }
+
 }

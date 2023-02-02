@@ -99,6 +99,7 @@ Route::get('/instructors',[InstructorController::class, 'index']);
 
 // absence 
 Route::get('student/absence/{id}',[AbsenceController::class,'show']);
+Route::get('student/excuse/{id}',[AbsenceWithExcuseController::class,'show']);
 Route::post('student/absence',[AbsenceController::class,'store']);
 Route::post('student/excuse',[AbsenceWithExcuseController::class,'store']);
 Route::delete('student/absence',[AbsenceController::class,'destroy']);
