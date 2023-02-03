@@ -227,12 +227,9 @@ class AbsenceController extends Controller
 
     public function AbsenceHistory($section_id, $day)
     {
-        // $all_students = Student_Section::where('section_id', $section_id)->get();
-        $all_students = DB::table('student__sections')->join('students', 'student__sections.student_id', '=', 'students.student_id')->where('section_id', $section_id)->select('student__sections.student_id', 'student_name')->get();
-        // $all_absence_students = Absence::where('section_id', $section_id)->where('absence_date', $day)->get();
+        $all_students = DB::table('student__sections')->join('students', 'student__sections.student_id', '=', 'students.student_id')->
+                where('section_id', $section_id)->select('student__sections.student_id', 'student_name', 'mac_address')->get();
         $all_absence_students = DB::table('absences')->where('section_id', $section_id)->where('absence_date', $day)->get();
-
-        // return $all_absence_students;
 
         if($all_students->isEmpty())
         {
