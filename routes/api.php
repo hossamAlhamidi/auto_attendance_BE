@@ -12,6 +12,7 @@ use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\InstructorAuthController;
 use App\Http\Controllers\AbsenceController;
+use App\Http\Controllers\AbsenceWithExcuseController;
 use App\Http\Controllers\DashboardController;
 
 /*
@@ -92,7 +93,9 @@ Route::get('/instructors',[InstructorController::class, 'index']);
 
 // absence 
 Route::get('student/absence/{id}',[AbsenceController::class,'show']);
+Route::get('student/excuse/{id}',[AbsenceWithExcuseController::class,'show']);
 Route::post('student/absence',[AbsenceController::class,'store']);
+Route::post('student/excuse',[AbsenceWithExcuseController::class,'store']);
 Route::delete('student/absence',[AbsenceController::class,'destroy']);
 Route::delete('student/absence/multi',[AbsenceController::class,'multiDelete']);
 Route::get('student/absence/history/{id}/{day}',[AbsenceController::class,'AbsenceHistory']);
