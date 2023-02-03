@@ -26,7 +26,7 @@ class Student_SectionSeeder extends Seeder
             $section = $sections->random();
             $absences = DB::table('absences')->where('student_id' , $student->student_id)->count();
     
-            $percentage = ($absences / 33) * 100;
+            $percentage = ($absences / 30) * 100;
 
             $student_section = [
                 'student_id' => $student->student_id,

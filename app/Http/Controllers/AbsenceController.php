@@ -36,21 +36,23 @@ class AbsenceController extends Controller
             'section_id'=>'required|max:7'
         ]);
         
-       
-
         $student = DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->first();
-    //    $student = DB::select(DB::raw("SELECT * FROM `student__sections` where section_id = $var[section_id] and student_id = $var[student_id] "));
+
         if(!$student){
             return response(
-                ['message' => 'Student is not registered on this section'],
+                ['message' => 'Students is not registered on this section'],
                 404
             );
         }
-        $now = now();
+
         $today = Carbon::now()->format('Y-m-d');
         try{
-            // $absence= DB::insert("insert into absences (student_id, section_id, absence_date,created_at,updated_at) values ($var[student_id], $var[section_id],'$today','$now','$now')");
-            // DB::insert("insert into absences (student_id, section_id, absence_date, created_at, updated_at) values ($var[student_id], $var[section_id],'$today','$now','$now')");
+            $course_hours = DB::table('sections')->join('courses', 'sections.course_id', '=', 'courses.course_id')->
+                    where('section_id', $student->section_id)->select('course_hours')->first()->course_hours;
+
+            $number_of_absence = Absence::where('student_id', $student->student_id)->count();
+            $absence_percentage = $this->calculatePercentages($course_hours, $number_of_absence);
+
             DB::table('absences')->insert([
                 'student_id' => $student->student_id,
                 'section_id' => $student->section_id,
@@ -58,8 +60,8 @@ class AbsenceController extends Controller
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
-            $student->number_of_absence = $student->number_of_absence + 1 ;
-            DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->update(['number_of_absence' => $student->number_of_absence]);
+            DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->
+                    update(['number_of_absence' => $number_of_absence, 'absence_percentage' => $absence_percentage]);
         }
         catch (\Throwable $th) {
             return response(['message'=>$th], 400);
@@ -78,8 +80,6 @@ class AbsenceController extends Controller
 
         $section_id = $var['section_id'];
         $students_ids = $var['students_ids'];
-
-        // return $section_id;
         
         $students = DB::table('student__sections')->where('section_id', $section_id)->whereIn('student_id', $students_ids)->get();
 
@@ -93,9 +93,15 @@ class AbsenceController extends Controller
 
         $today = Carbon::now()->format('Y-m-d');
 
-        try {
-            foreach($students as $student)
-            {
+        $course_hours = DB::table('sections')->join('courses', 'sections.course_id', '=', 'courses.course_id')->
+                where('section_id',$var['section_id'])->select('course_hours')->first()->course_hours;
+
+        foreach($students as $student)
+        {
+            $number_of_absence = Absence::where('student_id', $student->student_id)->count();
+            $absence_percentage = $this->calculatePercentages($course_hours, $number_of_absence);
+
+            try {
                 DB::table('absences')->insert([
                     'student_id' => $student->student_id,
                     'section_id' => $student->section_id,
@@ -103,11 +109,12 @@ class AbsenceController extends Controller
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);
-                $student->number_of_absence = $student->number_of_absence + 1 ;
-                DB::table('student__sections')->where('student_id', $student->student_id)->where('section_id', $student->section_id)->update(['number_of_absence' => $student->number_of_absence]);
+            } catch (\Throwable $th) {
+                continue;
             }
-        } catch (\Throwable $th) {
-            return response(['message'=>$th], 400);
+
+            DB::table('student__sections')->where('student_id', $student->student_id)->where('section_id', $student->section_id)->
+                    update(['number_of_absence' => $number_of_absence, 'absence_percentage' => $absence_percentage]);
         }
 
         return response(['massage' => 'absences is added'], 201);
@@ -160,10 +167,62 @@ class AbsenceController extends Controller
         $absence->delete();
 
         $student = DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->first();
-        $student->number_of_absence = $student->number_of_absence - 1 ;
-        DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->update(['number_of_absence' => $student->number_of_absence]);
+        $course_hours = DB::table('sections')->join('courses', 'sections.course_id', '=', 'courses.course_id')->
+                    where('section_id',$var['section_id'])->select('course_hours')->first()->course_hours;
+
+        $number_of_absence = Absence::where('student_id', $student->student_id)->count();
+        $absence_percentage = $this->calculatePercentages($course_hours, $number_of_absence);
+
+        DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->
+                update(['number_of_absence' => $number_of_absence, 'absence_percentage' => $absence_percentage]);
 
         return response(['massage' => 'Absence is deleted'], 200);
+    }
+
+    public function multiDelete(Request $request)
+    {
+        $var = $request->validate([
+            'students_ids'=>'required|array',
+            'section_id'=>'required|max:7',
+            'absence_date'=>'required|date'
+        ]);
+
+        $section_id = $var['section_id'];
+        $students_ids = $var['students_ids'];
+        
+        $students = DB::table('student__sections')->where('section_id', $section_id)->whereIn('student_id', $students_ids)->get();
+
+        if($students->isEmpty())
+        {
+            return response()->json(
+                ['message' => 'Students is not registered on this section'],
+                404
+            );
+        }
+
+        $absences = DB::table('absences')->where('absence_date',$var['absence_date'])->where('section_id', $section_id)->whereIn('student_id', $students_ids);
+        if($absences->get()->isEmpty())
+        {
+            return response(
+                ['massage' => 'this Absence info is not found'],
+                404
+            );
+        }
+        $absences->delete();
+
+        $course_hours = DB::table('sections')->join('courses', 'sections.course_id', '=', 'courses.course_id')->
+                where('section_id',$var['section_id'])->select('course_hours')->first()->course_hours;
+
+        foreach($students as $student)
+        {
+            $number_of_absence = Absence::where('student_id', $student->student_id)->count();
+            $absence_percentage = $this->calculatePercentages($course_hours, $number_of_absence);
+
+            DB::table('student__sections')->where('student_id', $student->student_id)->where('section_id', $student->section_id)->
+                    update(['number_of_absence' => $number_of_absence, 'absence_percentage' => $absence_percentage]);
+        }
+
+        return response(['massage' => 'absences is added'], 201);
     }
 
     public function AbsenceHistory($section_id, $day)
@@ -215,5 +274,22 @@ class AbsenceController extends Controller
         }
         return response()->json($students, 200);
         // return $students;
+    }
+
+    public function calculatePercentages($course_hours, $number_of_absence)
+    {
+        $number_of_weeks = 10;
+        if ($course_hours == 4 || $course_hours == 3)
+        {
+            $number_of_class_in_week = 3; 
+            return ($number_of_absence / ($number_of_class_in_week * $number_of_weeks)) / 100.0;
+
+        }elseif ($course_hours == 2) {
+            $number_of_class_in_week = 1; 
+            return ($number_of_absence / ($number_of_class_in_week * $number_of_weeks)) / 100.0;
+        }else {
+            $number_of_class_in_week = 0;
+             return ($number_of_absence / ($number_of_class_in_week * $number_of_weeks)) / 100.0;
+        }
     }
 }
