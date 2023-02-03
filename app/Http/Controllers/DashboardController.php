@@ -57,34 +57,27 @@ class DashboardController extends Controller
         
     }
 
-    public function NumberOfAbsence($number = 5, $from = null, $to = null) // 
+    public function NumberOfAbsence($from = null, $to = null) // 
     {
-        // $var = [
-        //     'number' => $number,
-        //     'from' => $from,
-        //     'to' => $to,
-        // ];
-        // $validator = Validator::make($var, [
-        //     'number' => 'numeric',
-        //     'from' => '',
-        //     'to' => ''
-        // ],);
-        // if ($validator->fails()) {
-        //     return response()->json(['error' => $validator->errors()], 400);
-        // }
-
+        if($to == null || Carbon::createFromFormat('Y-m-d', $from)->diffInDays(Carbon::createFromFormat('Y-m-d', $to)) > 30)
+        {
+            $carbon_from = Carbon::create($from);
+            $to = $carbon_from->addMonths(1)->format('Y-m-d'); 
+        }
         if($from != null && $to != null)
         {        
             $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->whereBetween('absence_date', [$from, $to])->
-                    groupBy('absence_date')->orderByDesc('number')->orderByDesc('absence_date')->take($number)->get();
-            // return $absences;
-        }else if($from != null && $to == null) {
-            $to = Carbon::now()->format('Y-m-d');
-            $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->whereBetween('absence_date', [$from, $to])->
-                    groupBy('absence_date')->orderByDesc('number')->orderByDesc('absence_date')->take($number)->get();
-        }else {
+                    groupBy('absence_date')->orderByDesc('absence_date')->get();
+                    return $absences;
+        }
+        // else if($from != null && $to == null) {
+        //     $to = Carbon::now()->format('Y-m-d');
+        //     $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->whereBetween('absence_date', [$from, $to])->
+        //             groupBy('absence_date')->orderBy('absence_date', 'asc')->get();
+        // }
+        else {
             $absences = DB::table('absences')->select('absence_date', DB::raw('count(*) as number'))->
-                    groupBy('absence_date')->orderByDesc('number')->orderByDesc('absence_date')->take($number)->get();
+                    groupBy('absence_date')->orderByDesc('absence_date')->take(5)->get();
         }
         $absences_array = $absences->toArray();
         

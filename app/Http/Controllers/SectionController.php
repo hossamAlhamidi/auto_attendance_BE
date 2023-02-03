@@ -246,7 +246,7 @@ class SectionController extends Controller
 
         $section_data = $section->first();
 
-        if($section_data->type != 'lucture'){
+        if($section_data->type != 'lecture'){
             $section->delete();
             return response()->json(['message' => 'Section is deleted'], 200);
         }
