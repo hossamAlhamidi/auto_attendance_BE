@@ -29,11 +29,11 @@ use App\Http\Controllers\DashboardController;
 /* public */
 // sections
 // Route::get('/sections',[SectionController::class,'index']);
-// Route::post('/sections',[SectionController::class,'store']); //protected
+Route::post('/sections',[SectionController::class,'store']); //protected
 Route::get('/sections/{id}',[SectionController::class,'show']);
 Route::get('/sections/search/{name}',[SectionController::class,'search']);
-Route::delete('/sections/{id}',[SectionController::class,'destroy']); 
-Route::put('/sections',[SectionController::class,'update']); 
+Route::delete('/sections/{id}',[SectionController::class,'destroy']); //protected
+Route::put('/sections',[SectionController::class,'update']); //protected
 Route::get('/sections/instructor/{id}',[SectionController::class,'FindSectionInstrctor']);
 Route::get('/sections/instructor/students/{instructor_id}/{student_id?}',[SectionController::class,'FindStudentForInstructor']);
 
@@ -41,7 +41,13 @@ Route::get('/sections/instructor/students/{instructor_id}/{student_id?}',[Sectio
 
 // courses 
 Route::get('/courses',[CourseController::class,'index']);
+Route::post('/courses',[CourseController::class,'store']); //protected
+Route::put('/courses',[CourseController::class,'update']);
 Route::delete('/courses/{id}',[CourseController::class,'destroy']);
+// end of courses
+
+// students sections 
+Route::get('/section/students/{id}',[StudentSectonController::class,'sectionStudentsList']);
 Route::get('/students/sections/{id}',[StudentSectonController::class,'showStudentsSections']);
 Route::post('/students/sections',[StudentSectonController::class,'store']);
 Route::post('/students/sections/all',[StudentSectonController::class,'storeAll']);
@@ -64,7 +70,7 @@ Route::put('/students/{id}',[StudentController::class,'update']);
 // instructor
 // Route::put('/instructor/{id}',[InstructorController::class,'update']);
 Route::get('/instructor/sections/{id}',[InstructorController::class,'showSections']);
-// Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
+Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
 Route::get('/instructors',[InstructorController::class, 'index']);
 // Route::get('/instructor/{id}',[InstructorController::class, 'show']);
 
