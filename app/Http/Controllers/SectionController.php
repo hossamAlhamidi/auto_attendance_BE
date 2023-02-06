@@ -260,17 +260,25 @@ class SectionController extends Controller
             $lab = Section::where('section_id', $section_data->section_id+2);
         }
 
-        if($tutorial->first())
-        {
-            // return response()->json(['message' => "Tutorial for this Lucture can't be found"], 404);
-            $tutorial->delete();
+        try {
+            if($tutorial->first())
+            {
+                // return response()->json(['message' => "Tutorial for this Lucture can't be found"], 404);
+                $tutorial->delete();
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
         }
-        if($lab->first())
-        {
-            // return response()->json(['message' => "Lab for this Lucture can't be found"], 404);
-            $lab->delete();
+        try {
+            if($lab->first())
+            {
+                // return response()->json(['message' => "Lab for this Lucture can't be found"], 404);
+                $lab->delete();
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
         }
-
+        
         // $tutorial->delete();
         // $lab->delete();
         $section->delete();
