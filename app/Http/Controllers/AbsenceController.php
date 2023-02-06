@@ -254,7 +254,8 @@ class AbsenceController extends Controller
                     $var = [
                         'student_id' => $student->student_id,
                         'student_name' => $student->student_name,
-                        'absence' => $absence
+                        'absence' => $absence,
+                        'ma_address' => $student->mac_address
                     ];
 
                 }
@@ -263,7 +264,8 @@ class AbsenceController extends Controller
                 $var = [
                     'student_id' => $student->student_id,
                     'student_name' => $student->student_name,
-                    'absence' => $absence
+                    'absence' => $absence,
+                    'ma_address' => $student->mac_address
                 ];
                 $students[] = $var;
             }
