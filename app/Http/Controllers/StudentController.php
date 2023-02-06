@@ -182,11 +182,16 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $validated_id = htmlspecialchars($id);
-        $student = Student::Where('student_id',$validated_id)->first();
-        if(count($student->get())==0){
+        $validatedData = $request->validate([
+            'student_id'=>'required',
+            'student_name' => 'required',
+            'email' => 'required|email',
+           
+        ]);
+        $student = Student::Where('student_id',$validatedData['student_id'])->first();
+        if(is_null($student)){
             return response([
                 'message'=>'No found Student by This ID'
             ],401);

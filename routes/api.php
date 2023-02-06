@@ -63,7 +63,7 @@ Route::post('/students',[StudentController::class,'show']);
 Route::get('/students/{student_id}/{instructor_id?}',[StudentController::class,'showGet']);
 Route::get('/students',[StudentController::class,'index']);
 Route::delete('/students/{id}',[StudentController::class,'destroy']);
-Route::put('/students/{id}',[StudentController::class,'update']);
+Route::put('/students',[StudentController::class,'update']);
 // end of students 
 
 
