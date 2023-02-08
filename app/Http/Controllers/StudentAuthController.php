@@ -21,6 +21,7 @@ class StudentAuthController extends Controller
             'password' => 'required|string', //|confirmed
             'mac_address' => 'required|string'
         ]);
+        // return $var['mac_address'];
 
         //create the student 
         $student = Student::create([
@@ -28,8 +29,8 @@ class StudentAuthController extends Controller
             'student_name' => $var['student_name'],
             'email' => $var['email'],
             'phone_number' => $var['phone_number'],
+            'mac_address' => $var['mac_address'],
             'password' => bcrypt($var['password']),
-            'mac_address' => $var['mac_address']
         ]);
 
         // $token = $student->createToken('studnet_token')->plainTextToken;
