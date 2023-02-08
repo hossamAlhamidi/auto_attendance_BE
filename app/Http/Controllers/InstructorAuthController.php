@@ -35,11 +35,18 @@ class InstructorAuthController extends Controller
         $password = Str::random(10);
 
         // sending email to the user 
-        $email = [
-            'body' => 'This is your password: ' . $password ,
-            'name' => $var['instructor_name']
-        ];
-        $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
+        try {
+            if(Instructor::where('instructor_id', $var['instructor_id'])->first())
+            {
+                $email = [
+                    'body' => 'This is your password: ' . $password ,
+                    'name' => $var['instructor_name']
+                ];
+                $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
+            }
+        } catch (\Throwable $th) {
+            return response(['message' => 'Email already exist'], 404);
+        }
 
         if($send_email){
             try {

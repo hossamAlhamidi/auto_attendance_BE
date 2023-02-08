@@ -85,7 +85,8 @@ Route::get('/instructors',[InstructorController::class, 'index']);
     //student
     Route::post('/students/register',[StudentAuthController::class, 'register']);
     Route::post('/students/login',[StudentAuthController::class, 'login']);
-    Route::post('/students/logout',[StudentAuthController::class, 'logout']); // protected 
+    Route::post('/students/logout',[StudentAuthController::class, 'logout']); // protected
+    Route::put('/students/forgetPassword/{id}',[StudentAuthController::class, 'forgetPassword']); 
 
     //admin
     Route::post('/admin/login',[AdminAuthController::class, 'login']);
