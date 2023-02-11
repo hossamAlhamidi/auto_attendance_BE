@@ -17,13 +17,13 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            StudentSeeder::class,
-            InstructorSeeder::class,
-            CourseSeeder::class,
-            SectionSeeder::class,
-            AbsenceSeeder::class,
-            Student_sectionSeeder::class,
-            Student_CourseSeeder::class,
+            // StudentSeeder::class,
+            // InstructorSeeder::class,
+            // CourseSeeder::class,
+            // SectionSeeder::class,
+            // AbsenceSeeder::class,
+            // Student_sectionSeeder::class,
+            // Student_CourseSeeder::class,
         ]);
     }
 }
