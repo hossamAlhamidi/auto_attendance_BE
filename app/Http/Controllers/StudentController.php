@@ -127,7 +127,7 @@ class StudentController extends Controller
     {
         if($instructor_id ==0)
         {
-            $student = Student::Where('student_id',$student_id)->get(['student_id','student_name','email','phone_number']);
+            $student = Student::Where('student_id',$student_id)->get(['student_id','student_name','email','phone_number','mac_address']);
             if(count($student)>0){
                 return $student;
             }
@@ -188,6 +188,7 @@ class StudentController extends Controller
             'student_id'=>'required',
             'student_name' => 'required',
             'email' => 'required|email',
+            'mac_address'=>'required'
            
         ]);
         $student = Student::Where('student_id',$validatedData['student_id'])->first();
@@ -204,7 +205,8 @@ class StudentController extends Controller
             'student_id' => $student['student_id'],
             'student_name' => $student['student_name'],
             'email' => $student['email'],
-            'phone_number' => $student['phone_number']
+            'phone_number' => $student['phone_number'],
+            'mac_address' => $student['mac_address']
         ];
 
         return response($response, 201);
