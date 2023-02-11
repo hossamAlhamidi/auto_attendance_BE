@@ -10,6 +10,6 @@ class Student extends Model
     use HasFactory;
     protected $primaryKey = 'student_id';
     protected $fillable = [
-        'student_id','student_name','email','phone_number','password' 
+        'student_id', 'student_name', 'email', 'phone_number', 'mac_address', 'password' 
      ];
 }
