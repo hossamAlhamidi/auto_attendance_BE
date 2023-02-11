@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Models\Student;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Mail\InstructorRegisteration;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\StudentForgetPassword;
 // use GuzzleHttp\Promise\Create;
@@ -21,31 +22,57 @@ class StudentAuthController extends Controller
             'student_name' => 'required|string',
             'email' => 'string',
             'phone_number' => 'string',
-            'password' => 'required|string', //|confirmed
             'mac_address' => 'required|string'
         ]);
         // return $var['mac_address'];
 
+        // create random password 
+        $password = Str::random(10);
+
+        // sending email to the user 
+        try {
+            if(!Student::where('student_id', $var['student_id'])->first())
+            {
+                $email = [
+                    'body' => 'This is your password: ' . $password ,
+                    'name' => $var['student_name']
+                ];
+                $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
+            } else {
+                return response()->json(['message' => 'Already exist'], 404);
+            }
+        } catch (\Throwable $th) {
+            return response(['message' => 'Email already exist'], 404);
+        }
+
         //create the student 
-        $student = Student::create([
-            'student_id' => $var['student_id'],
-            'student_name' => $var['student_name'],
-            'email' => $var['email'],
-            'phone_number' => $var['phone_number'],
-            'mac_address' => $var['mac_address'],
-            'password' => bcrypt($var['password']),
-        ]);
+        if($send_email){
+            try {
+                $student = Student::create([
+                    'student_id' => $var['student_id'],
+                    'student_name' => $var['student_name'],
+                    'email' => $var['email'],
+                    'phone_number' => $var['phone_number'],
+                    'mac_address' => $var['mac_address'],
+                    'password' => bcrypt($password),
+                ]);
+        
+                // $token = $student->createToken('studnet_token')->plainTextToken;
+        
+                $response = [
+                    'student_id' => $student['student_id'],
+                    'student_name' => $student['student_name'],
+                    'email' => $student['email'],
+                    'phone_number' => $student['phone_number']
+                ];
+        
+                return response($response, 201);
 
-        // $token = $student->createToken('studnet_token')->plainTextToken;
-
-        $response = [
-            'student_id' => $student['student_id'],
-            'student_name' => $student['student_name'],
-            'email' => $student['email'],
-            'phone_number' => $student['phone_number']
-        ];
-
-        return response($response, 201);
+            } catch (\Throwable $th) {
+                return response(['message' => 'Wrong Email'], 404);
+            }
+        }
+        
     }
 
     public function login(request $request)
@@ -108,7 +135,7 @@ class StudentAuthController extends Controller
             try {
                 Student::where('student_id', $student_id)->update(['password' => bcrypt($password)]);
             } catch (\Throwable $th) {
-                return response(['message' => 'Somthing went Wrong'], 404);
+                return response(['message' => 'Something went Wrong'], 404);
             }
         }   
         return response()->json(
