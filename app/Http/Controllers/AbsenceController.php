@@ -50,9 +50,6 @@ class AbsenceController extends Controller
             $course_hours = DB::table('sections')->join('courses', 'sections.course_id', '=', 'courses.course_id')->
                     where('section_id', $student->section_id)->select('course_hours')->first()->course_hours;
 
-            $number_of_absence = Absence::where('student_id', $student->student_id)->count();
-            $absence_percentage = $this->calculatePercentages($course_hours, $number_of_absence);
-
             DB::table('absences')->insert([
                 'student_id' => $student->student_id,
                 'section_id' => $student->section_id,
@@ -60,6 +57,10 @@ class AbsenceController extends Controller
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
+
+            $number_of_absence = Absence::where('student_id', $student->student_id)->count();
+            $absence_percentage = $this->calculatePercentages($course_hours, $number_of_absence);
+
             DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->
                     update(['number_of_absence' => $number_of_absence, 'absence_percentage' => $absence_percentage]);
         }
@@ -98,9 +99,6 @@ class AbsenceController extends Controller
 
         foreach($students as $student)
         {
-            $number_of_absence = Absence::where('student_id', $student->student_id)->count();
-            $absence_percentage = $this->calculatePercentages($course_hours, $number_of_absence);
-
             try {
                 DB::table('absences')->insert([
                     'student_id' => $student->student_id,
@@ -112,6 +110,8 @@ class AbsenceController extends Controller
             } catch (\Throwable $th) {
                 continue;
             }
+            $number_of_absence = Absence::where('student_id', $student->student_id)->count();
+            $absence_percentage = $this->calculatePercentages($course_hours, $number_of_absence);
 
             DB::table('student__sections')->where('student_id', $student->student_id)->where('section_id', $student->section_id)->
                     update(['number_of_absence' => $number_of_absence, 'absence_percentage' => $absence_percentage]);
@@ -255,7 +255,7 @@ class AbsenceController extends Controller
                         'student_id' => $student->student_id,
                         'student_name' => $student->student_name,
                         'absence' => $absence,
-                        'ma_address' => $student->mac_address
+                        'mac_address' => $student->mac_address
                     ];
 
                 }
@@ -265,7 +265,7 @@ class AbsenceController extends Controller
                     'student_id' => $student->student_id,
                     'student_name' => $student->student_name,
                     'absence' => $absence,
-                    'ma_address' => $student->mac_address
+                    'mac_address' => $student->mac_address
                 ];
                 $students[] = $var;
             }
@@ -281,14 +281,14 @@ class AbsenceController extends Controller
         if ($course_hours == 4 || $course_hours == 3)
         {
             $number_of_class_in_week = 3; 
-            return ($number_of_absence / ($number_of_class_in_week * $number_of_weeks)) / 100.0;
+            return (($number_of_absence / ($number_of_class_in_week * $number_of_weeks))) * 100;
 
         }elseif ($course_hours == 2) {
             $number_of_class_in_week = 1; 
-            return ($number_of_absence / ($number_of_class_in_week * $number_of_weeks)) / 100.0;
+            return (($number_of_absence / ($number_of_class_in_week * $number_of_weeks))) * 100;
         }else {
-            $number_of_class_in_week = 0;
-             return ($number_of_absence / ($number_of_class_in_week * $number_of_weeks)) / 100.0;
+            // $number_of_class_in_week = 0;
+             return 0;
         }
     }
 }
