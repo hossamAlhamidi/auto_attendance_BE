@@ -24,7 +24,7 @@ class InstructorAuthController extends Controller
     public function register(request $request)
     {
         $var = $request->validate([
-            'instructor_id' => 'required|string|unique:instructors,instructor_id|max:999999999',
+            'instructor_id' => 'required|string|unique:instructors,instructor_id|max:12',
             'instructor_name' => 'required|string',
             'email' => 'email|unique:instructors,email',
             'phone_number' => 'string|nullable',
@@ -39,7 +39,7 @@ class InstructorAuthController extends Controller
         {
             return response()->json(['message' => 'Instructor already exist'], 404);       
         }
-        
+
         $email = [
             'body' => 'This is your password: ' . $password ,
             'name' => $var['instructor_name']
