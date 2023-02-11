@@ -117,8 +117,6 @@ Route::get('dashboard/absence/{from?}/{to?}',[DashboardController::class,'Number
 Route::get('dashboard/count',[DashboardController::class,'count']);
 //end of dashboard
 
-
-
 /* protected */
 
 Route::group(['middleware'=>['auth:sanctum']], function () {
