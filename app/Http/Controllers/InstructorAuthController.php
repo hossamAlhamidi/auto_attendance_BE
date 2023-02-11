@@ -31,18 +31,20 @@ class InstructorAuthController extends Controller
             // 'password' => 'required|string|confirmed'
         ]);
 
-        // create randomed password 
+        // create random password 
         $password = Str::random(10);
 
         // sending email to the user 
         try {
-            if(Instructor::where('instructor_id', $var['instructor_id'])->first())
+            if(!Instructor::where('instructor_id', $var['instructor_id'])->first())
             {
                 $email = [
                     'body' => 'This is your password: ' . $password ,
                     'name' => $var['instructor_name']
                 ];
                 $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
+            } else {
+                return response()->json(['message' => 'Already exist'], 404);
             }
         } catch (\Throwable $th) {
             return response(['message' => 'Email already exist'], 404);
@@ -51,7 +53,7 @@ class InstructorAuthController extends Controller
         if($send_email){
             try {
                 //create the instructor 
-                $instructor = Instructor::create([
+                Instructor::create([
                     'instructor_id' => $var['instructor_id'],
                     'instructor_name' => $var['instructor_name'],
                     'email' => $var['email'],
@@ -59,14 +61,14 @@ class InstructorAuthController extends Controller
                     'password' =>  bcrypt($password)
                 ]);
 
-                // $token = $instructor->createToken('instructor_token', ['*'])->plainTextToken;
+                // $token = $instructor->createToken('instructor_token', ['instructor'])->plainTextToken;
 
                 // formlate the response massage
                 $response = [
-                    'instructor_id' => $instructor['instructor_id'],
-                    'instructor_name' => $instructor['instructor_name'],
-                    'email' => $instructor['email'],
-                    'phone_number' => $instructor['phone_number']
+                    'instructor_id' => $var['instructor_id'],
+                    'instructor_name' => $var['instructor_name'],
+                    'email' => $var['email'],
+                    'phone_number' => $var['phone_number']
                 ];
                 return response($response, 201);
 
