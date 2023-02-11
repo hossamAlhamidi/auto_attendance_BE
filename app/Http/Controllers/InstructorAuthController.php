@@ -24,7 +24,7 @@ class InstructorAuthController extends Controller
     public function register(request $request)
     {
         $var = $request->validate([
-            'instructor_id' => 'required|Int|unique:instructors,instructor_id|max:99999999',
+            'instructor_id' => 'required|string|unique:instructors,instructor_id|max:999999999',
             'instructor_name' => 'required|string',
             'email' => 'email|unique:instructors,email',
             'phone_number' => 'string|nullable',
@@ -35,24 +35,20 @@ class InstructorAuthController extends Controller
         $password = Str::random(10);
 
         // sending email to the user 
-        try {
-            if(!Instructor::where('instructor_id', $var['instructor_id'])->first())
-            {
-                $email = [
-                    'body' => 'This is your password: ' . $password ,
-                    'name' => $var['instructor_name']
-                ];
-                $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
-            } else {
-                return response()->json(['message' => 'Already exist'], 404);
-            }
-        } catch (\Throwable $th) {
-            return response(['message' => 'Email already exist'], 404);
+        if(Instructor::where('instructor_id', $var['instructor_id'])->first())
+        {
+            return response()->json(['message' => 'Instructor already exist'], 404);       
         }
+        
+        $email = [
+            'body' => 'This is your password: ' . $password ,
+            'name' => $var['instructor_name']
+        ];
+        $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
 
+        //create the instructor 
         if($send_email){
             try {
-                //create the instructor 
                 Instructor::create([
                     'instructor_id' => $var['instructor_id'],
                     'instructor_name' => $var['instructor_name'],
