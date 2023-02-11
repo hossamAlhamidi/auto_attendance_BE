@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Instructor;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class InstructorController extends Controller
      */
     public function index()
     {
-         return Instructor::select('instructor_id', 'instructor_name', 'email','phone_number')->get();
+        return Instructor::select('instructor_id', 'instructor_name', 'email', 'phone_number')->get();
     }
 
     /**
@@ -43,16 +44,14 @@ class InstructorController extends Controller
     {
         $user = Auth::guard('sanctum')->user();
         $instructor_id = $user->instructor_id;
-            $instructor = Instructor::Where('instructor_id',$instructor_id)->first(['instructor_id','instructor_name','email','phone_number']);
-            if($instructor){
-                return $instructor;
-            }
-            else {
-                return response([
-                    'message'=>'No found instructor by This ID'
-                ],401);
-            }
-        
+        $instructor = Instructor::Where('instructor_id', $instructor_id)->first(['instructor_id', 'instructor_name', 'email', 'phone_number']);
+        if ($instructor) {
+            return $instructor;
+        } else {
+            return response([
+                'message' => 'No found instructor by This ID'
+            ], 401);
+        }
     }
 
 
@@ -66,57 +65,38 @@ class InstructorController extends Controller
      */
     public function update(Request $request)
     {
-        // $validated_id = htmlspecialchars($id);
 
-        // $instructor = Instructor::Where('instructor_id', $validated_id)->first();
-
-        // if(!$instructor){
-        //     return response([
-        //         'message'=>'No Instructor found by This ID'
-        //     ],401);
-        // }
-
-        // $instructor->update($request->all());
-
-        // $response = [
-        //     'instructor_id' => $instructor['instructor_id'],
-        //     'instructor_name' => $instructor['instructor_name'],
-        //     'email' => $instructor['email'],
-        //     'phone_number' => $instructor['phone_number']
-        // ];
-
-        // return response($response, 201);
 
         $user = Auth::guard('sanctum')->user();
         $instructor_id = $user->instructor_id;
-            $instructor = Instructor::findOrFail($instructor_id);
-            
-            $validatedData = $request->validate([
-                'instructor_name' => 'required|string|max:50',
-                'email' => 'required|string|email|max:50',
-                'phone_number' => 'sometimes|string|nullable|max:15',
-                'password' => 'sometimes|string|min:3|confirmed',
-                'old_password' => 'required_with:password|string'
-            ]);
-    
-            if(array_key_exists('password',$validatedData)){
-                // check if the old password provided is correct
-                if (!Hash::check($validatedData['old_password'], $instructor->password)) {
-                    return response(['message' => 'Old password is not correct'], 401);
-                }
-                $validatedData['password'] = bcrypt($validatedData['password']);
+        $instructor = Instructor::findOrFail($instructor_id);
+
+        $validatedData = $request->validate([
+            'instructor_name' => 'required|string|max:50',
+            'email' => 'required|string|email|max:50',
+            'phone_number' => 'sometimes|string|nullable|max:15',
+            'password' => 'sometimes|string|min:3|confirmed',
+            'old_password' => 'required_with:password|string'
+        ]);
+
+        if (array_key_exists('password', $validatedData)) {
+            // check if the old password provided is correct
+            if (!Hash::check($validatedData['old_password'], $instructor->password)) {
+                return response(['message' => 'Old password is not correct'], 401);
             }
-            $instructor->fill($validatedData);
-            if ($instructor->isDirty()) {
-                $instructor->save();
-                return response(['message' => 'Instructor information updated successfully']);
-            }else{
-                return response(['message' => 'No changes made']);
-            }
-            // $instructor->update($validatedData);
-    
-            // return response(['message' => 'Instructor information updated successfully']);
-        
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        }
+        $instructor->fill($validatedData);
+        if ($instructor->isDirty()) {
+            $instructor->save();
+            return response(['message' => 'Instructor information updated successfully']);
+        } else {
+            return response(['message' => 'No changes made']);
+        }
+        // $instructor->update($validatedData);
+
+        // return response(['message' => 'Instructor information updated successfully']);
+
     }
 
     /**
@@ -127,9 +107,14 @@ class InstructorController extends Controller
      */
     public function destroy($id)
     {
+        $user = Auth::guard('sanctum')->user();
+        $instructor_id = $user->instructor_id;
+        if ($id == $instructor_id) {
+            return response(['message' => 'You can not delete yourself'], 404);
+        }
+
         $instructor = DB::table('instructors')->where('instructor_id', $id);
-        if(!$instructor->first())
-        {
+        if (!$instructor->first()) {
             return response(['message' => 'Instructor with this ID not found'], 404);
         }
         $instructor->delete();
@@ -140,7 +125,7 @@ class InstructorController extends Controller
     public function showSections($instructor_id)
     {
         // $result = DB::select( DB::raw("SELECT section_id, `course_id`, `instructor_name`, `classroom`, `time` FROM sections where instructor_id = $instructor_id ") );
-       $result = Section::Where('instructor_id',$instructor_id)->get();
+        $result = Section::Where('instructor_id', $instructor_id)->get();
         return $result;
     }
 }
