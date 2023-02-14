@@ -29,22 +29,26 @@ class StudentAuthController extends Controller
         // create random password 
         $password = Str::random(10);
 
-        // sending email to the user 
-        try {
-            if(!Student::where('student_id', $var['student_id'])->first())
-            {
-                $email = [
-                    'body' => 'This is your password: ' . $password ,
-                    'name' => $var['student_name']
-                ];
-                $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
-            } else {
-                return response()->json(['message' => 'Already exist'], 404);
-            }
-        } catch (\Throwable $th) {
+
+        if(Student::where('student_id', $var['student_id'])->first())
+        {
             return response(['message' => 'Email already exist'], 404);
+
+        }
+        if(Student::where('email', $var['email'])->first())
+        {
+            return response(['message' => 'Email already exist'], 404);
+
         }
 
+        
+        // sending email to the user 
+        $email = [
+            'body' => 'This is your password: ' . $password ,
+            'name' => $var['student_name']
+        ];
+        $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
+        
         //create the student 
         if($send_email){
             try {
