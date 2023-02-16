@@ -40,14 +40,14 @@ Route::get('/sections/instructor/students/{instructor_id}/{student_id?}', [Secti
 
 
 
-// students sections 
+// students sections
 Route::get('/section/students/{id}', [StudentSectonController::class, 'sectionStudentsList']);
 Route::get('/students/sections/{id}', [StudentSectonController::class, 'showStudentsSections']);
 
 
 // Route::get('/instructor/sections/{id}',[StudentSectonController::class,'showInstructorSections']);
 // Route::get('/sections/students/{id}',[StudentSectonController::class,'showStudents']);
-// end of students sections 
+// end of students sections
 
 // students
 // Route::get('/students/{id}',[StudentController::class,'show']);
@@ -56,7 +56,7 @@ Route::get('/students/{student_id}/{instructor_id?}', [StudentController::class,
 Route::get('/students', [StudentController::class, 'index']);
 Route::delete('/students/{id}', [StudentController::class, 'destroy']);
 // Route::put('/students',[StudentController::class,'update']);
-// end of students 
+// end of students
 
 
 // instructor
@@ -65,7 +65,7 @@ Route::get('/instructor/sections/{id}', [InstructorController::class, 'showSecti
 
 // Route::get('/instructor/{id}',[InstructorController::class, 'show']);
 
-// Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']); // protected 
+// Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']); // protected
 // end of instructor
 
 
@@ -79,15 +79,16 @@ Route::put('/students/forgetPassword/{id}', [StudentAuthController::class, 'forg
 
 //admin
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
-Route::post('/admin/logout', [AdminAuthController::class, 'logout']); // protected 
+Route::post('/admin/logout', [AdminAuthController::class, 'logout']); // protected
 
 //instructor
 Route::post('/instructor/register', [InstructorAuthController::class, 'register']);
 Route::post('/instructor/login', [InstructorAuthController::class, 'login']);
+Route::put('/instructor/forgetPassword/{id}',[InstructorAuthController::class, 'forgetPassword']);
 
 // end of authentication
 
-// absence 
+// absence
 Route::get('student/absence/{id}', [AbsenceController::class, 'show']);
 Route::get('student/excuse/{id}', [AbsenceWithExcuseController::class, 'show']);
 Route::post('student/absence', [AbsenceController::class, 'store']);
@@ -96,14 +97,14 @@ Route::delete('student/absence', [AbsenceController::class, 'destroy']);
 Route::delete('student/absence/multi', [AbsenceController::class, 'multiDelete']);
 Route::get('student/absence/history/{id}/{day}', [AbsenceController::class, 'AbsenceHistory']);
 Route::post('student/absence/multi', [AbsenceController::class, 'multiAbsence']);
-// end of absence 
+// end of absence
 
 
 
 /* protected */
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    // instructor 
+    // instructor
     Route::get('/instructor', [InstructorController::class, 'show']);
     Route::post('/instructor/logout', [InstructorAuthController::class, 'logout']);
     Route::put('/instructor', [InstructorController::class, 'update']);
@@ -112,7 +113,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::delete('/instructor/{id}',[InstructorController::class,'destroy']);
     // end instructor
 
-    // students 
+    // students
     Route::put('/students', [StudentController::class, 'update']);
     // end students
 
@@ -130,13 +131,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('dashboard/count', [DashboardController::class, 'count']);
     //end of dashboard
 
-    // student sections 
+    // student sections
     Route::post('/students/sections', [StudentSectonController::class, 'store']);
     Route::post('/students/sections/all', [StudentSectonController::class, 'storeAll']);
     Route::delete('/students/sections', [StudentSectonController::class, 'destroy']);
     // end of student sections
 
-    // courses 
+    // courses
     Route::get('/courses', [CourseController::class, 'index']);
     Route::post('/courses', [CourseController::class, 'store']); //protected
     Route::put('/courses', [CourseController::class, 'update']);
