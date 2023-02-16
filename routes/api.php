@@ -115,7 +115,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // end instructor
 
     // students
-    Route::put('/students/{id}', [StudentController::class, 'update']);
+    // Route::put('/students/{id}', [StudentController::class, 'update']);
     // end students
 
 
