@@ -72,16 +72,16 @@ class InstructorController extends Controller
         $instructor = Instructor::findOrFail($instructor_id);
 
         $validatedData = $request->validate([
-            'instructor_name' => 'required|string|max:50',
-            'email' => 'required|string|email|max:50',
+            'instructor_name' => 'sometimes|string|max:50',
+            'email' => 'sometimes|string|email|max:50',
             'phone_number' => 'sometimes|string|nullable|max:15',
-            'password' => 'sometimes|string|min:3|confirmed',
-            'old_password' => 'required_with:password|string'
+            'password' => 'sometimes|string|min:3',
+            // 'old_password' => 'required_with:password|string'
         ]);
 
         if (array_key_exists('password', $validatedData)) {
             // check if the old password provided is correct
-            if (!Hash::check($validatedData['old_password'], $instructor->password)) {
+            if (!Hash::check($request->old_password, $instructor->password)) {
                 return response(['message' => 'Old password is not correct'], 401);
             }
             $validatedData['password'] = bcrypt($validatedData['password']);
@@ -93,6 +93,9 @@ class InstructorController extends Controller
         } else {
             return response(['message' => 'No changes made']);
         }
+        // $instructor->where('instructor_id', $instructor_id)->update($validatedData);
+        // return response(['message' => 'Instructor information updated successfully']);
+
         // $instructor->update($validatedData);
 
         // return response(['message' => 'Instructor information updated successfully']);
