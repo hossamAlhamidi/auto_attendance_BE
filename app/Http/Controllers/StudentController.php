@@ -128,7 +128,7 @@ class StudentController extends Controller
     {
         if($instructor_id ==0)
         {
-            $student = Student::Where('student_id',$student_id)->get(['student_id','student_name','email','phone_number']);
+            $student = Student::Where('student_id',$student_id)->get(['student_id','student_name','email','phone_number','mac_address']);
             if(count($student)>0){
                 return $student;
             }
