@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Models\Section;
 use App\Models\Student_Section;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -52,7 +53,7 @@ class StudentController extends Controller
         $instructor_id = $request->instructor_id;
 
         $instructor = Instructor::where('instructor_id', $instructor_id)->first();
-            
+
             if(!$instructor)
             {
                 return response(['message' => 'There is no Instructor with this Instructor ID'], 404);
@@ -63,10 +64,10 @@ class StudentController extends Controller
             {
                 return response([
                     'message'=>'No found Student by This ID'
-                ],401);            
+                ],401);
             }
 
-            if ($instructor->is_admin == 1) 
+            if ($instructor->is_admin == 1)
             {
                 return response($student, 200);
             }
@@ -84,7 +85,7 @@ class StudentController extends Controller
                 // foreach($sections_arr as $section_id){
                 //     //  $student = DB::select(DB::raw("SELECT students.student_id,student_name,email,phone_number,section_id FROM students,`student__sections` where student__sections.student_id = $student_id and section_id = $section_id and  "));
                 //     $student=DB::select(DB::raw("SELECT student_id FROM student__sections where student_id = $student_id and section_id = $section_id"));
-                   
+
                 // }
                 $student = DB::table('student__sections')->whereIn('section_id', $sections_arr)->get('student_id');
                 foreach($student as $st){
@@ -96,7 +97,7 @@ class StudentController extends Controller
                 // }
                 $student = DB::table('students')->whereIn('student_id', $students_id)->where('student_id','like','%'.$student_id.'%')->get();
 
-                
+
             }
             // if(!$student->isEmpty())
             if(count($student)>0)
@@ -109,7 +110,7 @@ class StudentController extends Controller
                 ],401);
             }
 
-        
+
 
         // $student = Student::Where('student_id',$request->student_id)->get();
         // if(count($student)>0){
@@ -122,7 +123,7 @@ class StudentController extends Controller
         // }
     }
 
-    
+
     public function showGet($student_id, $instructor_id = 0)
     {
         if($instructor_id ==0)
@@ -141,7 +142,7 @@ class StudentController extends Controller
         else
         {
             $instructor = Instructor::where('instructor_id', $instructor_id)->first();
-            
+
             if(!$instructor)
             {
                 return response(['message' => 'There is no Instructor with this Instructor ID'], 404);
@@ -152,10 +153,10 @@ class StudentController extends Controller
             {
                 return response([
                     'message'=>'No found Student by This ID'
-                ],401);            
+                ],401);
             }
 
-            if ($instructor->is_admin == 1) 
+            if ($instructor->is_admin == 1)
             {
                 return response($student, 200);
             }
@@ -163,7 +164,7 @@ class StudentController extends Controller
             {
                 $student = (new SectionController)->FindStudentForInstructor($instructor->instructor_id, $student_id);
             }
-    
+
             if(!$student->isEmpty()){
                 return response($student, 200);
             }
@@ -182,27 +183,33 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $student_id)
     {
-        $validated_id = htmlspecialchars($id);
-        $student = Student::Where('student_id',$validated_id)->first();
-        if(count($student->get())==0){
+        $validated_id = htmlspecialchars($student_id);
+        $student = Student::where('student_id',$validated_id)->first();
+        if(!$student){
             return response([
-                'message'=>'No found Student by This ID'
+                'message'=>'There is no Student by This ID'
             ],401);
         }
-        // print_r($request->all()) ;
-        $student->update($request->all());
-        // return Student::Where('student_id',$request->student_id)->get();
-        //  return Response([$student],201);
-        $response = [
-            'student_id' => $student['student_id'],
-            'student_name' => $student['student_name'],
-            'email' => $student['email'],
-            'phone_number' => $student['phone_number']
-        ];
 
-        return response($response, 201);
+        $validatedData = $request->validate([
+            'student_name' => 'sometimes|string|max:50',
+            'email' => 'sometimes|string|email|max:50',
+            'phone_number' => 'sometimes|string|nullable|max:15',
+            'password' => 'sometimes|string|min:3',
+        ]);
+
+        if(array_key_exists('password', $validatedData)){
+            // check if the old password provided is correct
+            if (!Hash::check($request->old_password, $student->password)) {
+                return response(['message' => 'Old password is not correct'], 401);
+            }
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        }
+
+        $student->where('student_id',$validated_id)->update($validatedData);
+        return response(['message' => 'Student information updated successfully']);
     }
 
     /**

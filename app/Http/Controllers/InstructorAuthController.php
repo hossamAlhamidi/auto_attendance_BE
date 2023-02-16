@@ -31,13 +31,13 @@ class InstructorAuthController extends Controller
             // 'password' => 'required|string|confirmed'
         ]);
 
-        // create random password 
+        // create random password
         $password = Str::random(10);
 
-        // sending email to the user 
+        // sending email to the user
         if(Instructor::where('instructor_id', $var['instructor_id'])->first())
         {
-            return response()->json(['message' => 'Instructor already exist'], 404);       
+            return response()->json(['message' => 'Instructor already exist'], 404);
         }
 
         $email = [
@@ -46,7 +46,7 @@ class InstructorAuthController extends Controller
         ];
         $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
 
-        //create the instructor 
+        //create the instructor
         if($send_email){
             try {
                 Instructor::create([
@@ -71,7 +71,7 @@ class InstructorAuthController extends Controller
             } catch (\Throwable $th) {
                 return response(['message' => 'Wrong Email'], 404);
             }
-            
+
 
 
             // way 1
@@ -83,18 +83,18 @@ class InstructorAuthController extends Controller
             // } catch (\Throwable $th) {
             //     return response('Something went wrong');
             // }
-            
+
             // way 2
             // $to_name = $response['instructor_name'];
             // $to_email = $response['email'];
             // $data = array('name' => 'Automatic Attendance', 'body' => 'This is your password:' . $password);
-            // Mail::send('emails.InstructorRegisteration', $data, function($message) use ($to_name, $to_email) 
+            // Mail::send('emails.InstructorRegisteration', $data, function($message) use ($to_name, $to_email)
             // {
             //     $message->to($to_email, $to_name)->subject('Registration Info');
             //     $message->from('a.attendancy@gmail.com', 'Automatic Attendance');
             // });
         }
-        
+
         // $token = $instructor->createToken('instructor_token')->plainTextToken;
 
         return response('Something went wrong', 404);
@@ -144,5 +144,39 @@ class InstructorAuthController extends Controller
         return [
             'message' => 'logged out'
         ];
+    }
+
+    public function forgetPassword($instructor_id)
+    {
+        // create randomed password
+        $password = Str::random(10);
+
+        // sending email to the user
+        if(!$instructor = instructor::where('instructor_id', $instructor_id)->first())
+        {
+            return response(['message' => 'No instructor with this ID'], 404);
+        }
+        try {
+            $email = [
+                'body' => 'This is your new password: ' . $password ,
+                'name' => $instructor['instructor_name']
+            ];
+            $send_email = Mail::to($instructor['email'])->send(new InstructorRegisteration($email));
+        } catch (\Throwable $th) {
+            return response(['message' => 'Could not send Email'], 404);
+        }
+
+        if($send_email)
+        {
+            try {
+                instructor::where('instructor_id', $instructor_id)->update(['password' => bcrypt($password)]);
+            } catch (\Throwable $th) {
+                return response(['message' => 'Something went Wrong'], 404);
+            }
+        }
+        return response()->json(
+            [
+                'message' => 'Email sent'
+            ],200);
     }
 }

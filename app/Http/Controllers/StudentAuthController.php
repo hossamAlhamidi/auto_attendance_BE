@@ -26,30 +26,28 @@ class StudentAuthController extends Controller
         ]);
         // return $var['mac_address'];
 
-        // create random password 
+        // create random password
         $password = Str::random(10);
 
 
         if(Student::where('student_id', $var['student_id'])->first())
         {
             return response(['message' => 'Email already exist'], 404);
-
         }
         if(Student::where('email', $var['email'])->first())
         {
             return response(['message' => 'Email already exist'], 404);
-
         }
 
-        
-        // sending email to the user 
+
+        // sending email to the user
         $email = [
             'body' => 'This is your password: ' . $password ,
             'name' => $var['student_name']
         ];
         $send_email = Mail::to($var['email'])->send(new InstructorRegisteration($email));
-        
-        //create the student 
+
+        //create the student
         if($send_email){
             try {
                 $student = Student::create([
@@ -60,23 +58,23 @@ class StudentAuthController extends Controller
                     'mac_address' => $var['mac_address'],
                     'password' => bcrypt($password),
                 ]);
-        
+
                 // $token = $student->createToken('studnet_token')->plainTextToken;
-        
+
                 $response = [
                     'student_id' => $student['student_id'],
                     'student_name' => $student['student_name'],
                     'email' => $student['email'],
                     'phone_number' => $student['phone_number']
                 ];
-        
+
                 return response($response, 201);
 
             } catch (\Throwable $th) {
                 return response(['message' => 'Wrong Email'], 404);
             }
         }
-        
+
     }
 
     public function login(request $request)
@@ -117,34 +115,35 @@ class StudentAuthController extends Controller
 
     public function forgetPassword($student_id)
     {
-        // create randomed password 
+        // create randomed password
         $password = Str::random(10);
 
-        // sending email to the user 
-        try {
-            if($student = Student::where('student_id', $student_id)->first())
-            {
-                $email = [
-                    'body' => 'This is your new password: ' . $password ,
-                    'name' => $student['student_name']
-                ];
-                $send_email = Mail::to($student['email'])->send(new StudentForgetPassword($email));
-            }
-        } catch (\Throwable $th) {
+        // sending email to the user
+        if(!$student = Student::where('student_id', $student_id)->first())
+        {
             return response(['message' => 'No student with this ID'], 404);
         }
+        try {
+            $email = [
+                'body' => 'This is your new password: ' . $password ,
+                'name' => $student['student_name']
+            ];
+            $send_email = Mail::to($student['email'])->send(new StudentForgetPassword($email));
+        } catch (\Throwable $th) {
+            return response(['message' => 'Could not send Email'], 404);
+        }
 
-        if($send_email) 
+        if($send_email)
         {
             try {
                 Student::where('student_id', $student_id)->update(['password' => bcrypt($password)]);
             } catch (\Throwable $th) {
                 return response(['message' => 'Something went Wrong'], 404);
             }
-        }   
+        }
         return response()->json(
             [
                 'message' => 'Email sent'
-            ],200);                                                                                                                                    
+            ],200);
     }
 }
