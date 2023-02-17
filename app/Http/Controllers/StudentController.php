@@ -225,9 +225,6 @@ class StudentController extends Controller
         }
 
         $validatedData = $request->validate([
-            'student_name' => 'sometimes|string|max:50',
-            'email' => 'sometimes|string|email|max:50',
-            'phone_number' => 'sometimes|string|nullable|max:15',
             'password' => 'sometimes|string|min:3',
         ]);
 
