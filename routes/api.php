@@ -55,7 +55,7 @@ Route::post('/students', [StudentController::class, 'show']);
 Route::get('/students/{student_id}/{instructor_id?}', [StudentController::class, 'showGet']);
 Route::get('/students', [StudentController::class, 'index']);
 Route::delete('/students/{id}', [StudentController::class, 'destroy']);
-Route::put('/students/{id}', [StudentController::class, 'updatePassword']);
+Route::put('/students/mobile/updatePassword/{id}', [StudentController::class, 'updatePassword']);
 // Route::put('/students',[StudentController::class,'update']);
 // end of students
 
@@ -63,7 +63,7 @@ Route::put('/students/{id}', [StudentController::class, 'updatePassword']);
 // instructor
 // Route::put('/instructor/{id}',[InstructorController::class,'update']);
 Route::get('/instructor/sections/{id}', [InstructorController::class, 'showSections']);
-
+Route::put('/instructor/mobile/updatePassword/{id}', [InstructorController::class, 'updatePassword']);
 // Route::get('/instructor/{id}',[InstructorController::class, 'show']);
 
 // Route::post('/instructor/logout',[InstructorAuthController::class, 'logout']); // protected
