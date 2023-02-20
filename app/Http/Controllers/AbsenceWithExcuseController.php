@@ -29,7 +29,7 @@ class AbsenceWithExcuseController extends Controller
         if(!$student){
             return response(
                 ['message' => 'Student is not registered on this section'],
-                404
+                400
             );
         }
        
