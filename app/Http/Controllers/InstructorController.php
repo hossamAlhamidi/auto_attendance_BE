@@ -99,6 +99,32 @@ class InstructorController extends Controller
 
     }
 
+    public function updatePassword(Request $request, $instructor_id)
+    {
+        $validated_id = htmlspecialchars($instructor_id);
+        $instructor = Instructor::where('instructor_id',$validated_id)->first();
+        if(!$instructor){
+            return response([
+                'message'=>'There is no Student by This ID'
+            ],401);
+        }
+
+        $validatedData = $request->validate([
+            'password' => 'sometimes|string|min:3',
+        ]);
+
+        if(array_key_exists('password', $validatedData)){
+            // check if the old password provided is correct
+            if (!Hash::check($request->old_password, $instructor->password)) {
+                return response(['message' => 'Old password is not correct'], 401);
+            }
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        }
+
+        $instructor->where('instructor_id',$validated_id)->update($validatedData);
+        return response(['message' => 'Instructor information updated successfully']);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
