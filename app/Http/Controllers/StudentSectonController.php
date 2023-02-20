@@ -90,8 +90,8 @@ class StudentSectonController extends Controller
                 "message"=>"All students are added"
             ],201);
          }
-      
-       
+
+
     }
 
     /**
@@ -102,18 +102,27 @@ class StudentSectonController extends Controller
      */
     public function showStudentsSections($student_id)
     {
-        // $sections = Student_Section::where('student_id', $student_id)->get(); 
+        // $sections = Student_Section::where('student_id', $student_id)->get();
 
         // foreach ($sections as $section) {
 
         // }
         // $respons = [
-        //     'sections' => $sections 
+        //     'sections' => $sections
         // ];
         // return response($respons, 200);
 
-        // $result = DB::select( DB::raw("SELECT * FROM sections,`student__sections` where sections.section_id = student__sections.section_id and student_id = $student_id ") );
-        $result = DB::select(DB::raw("SELECT sections.section_id, `course_id`, `course_name`, instructors.instructor_name, instructors.email, `classroom`, `time`, `type`, `absence_percentage`, `number_of_absence` FROM sections,`student__sections`,`instructors` where sections.section_id = student__sections.section_id and sections.instructor_id = instructors.instructor_id and student_id = $student_id "));
+        // $result = DB::select(DB::raw("SELECT sections.section_id, sections.course_id, sections.course_name, instructors.instructor_name, instructors.email, classroom, time, type, absence_percentage, number_of_absence, course_hours
+        // FROM sections, student__sections, instructors, courses
+        // WHERE sections.section_id = student__sections.section_id AND sections.instructor_id = instructors.instructor_id AND sections.course_id = courses.course_id AND student_id = $student_id "));
+
+        $result = DB::table('sections')
+        ->join('student__sections', 'sections.section_id', '=', 'student__sections.section_id')
+        ->join('instructors', 'sections.instructor_id', '=', 'instructors.instructor_id')
+        ->join('courses', 'sections.course_id', '=', 'courses.course_id')
+        ->select('sections.section_id', 'sections.course_id', 'sections.course_name', 'instructors.instructor_name', 'instructors.email', 'classroom', 'time', 'type', 'absence_percentage', 'number_of_absence', 'course_hours')
+        ->where('student_id', $student_id)
+        ->get();
 
         return $result;
     }
@@ -127,7 +136,7 @@ class StudentSectonController extends Controller
 
     // public function showStudents($section_id)
     // {
-    //     $studnets = Student_Section::where('section_id', $section_id)->get(['student_id']); 
+    //     $studnets = Student_Section::where('section_id', $section_id)->get(['student_id']);
     //     return response([$studnets], 200);
     // }
 
@@ -157,7 +166,7 @@ class StudentSectonController extends Controller
         ]);
 
         $student = DB::table('student__sections')->where('student_id', $var['student_id'])->where('section_id', $var['section_id']);
-        
+
         if(!$student->first())
         {
             return response()->json(['massage' => 'There is no student with this ID in this section'], 400);

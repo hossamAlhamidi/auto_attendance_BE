@@ -21,7 +21,7 @@ class AbsenceController extends Controller
         //
     }
 
- 
+
 
     /**
      * Store a newly created resource in storage.
@@ -35,7 +35,7 @@ class AbsenceController extends Controller
             'student_id'=>'required|max:9',
             'section_id'=>'required|max:7'
         ]);
-        
+
         $student = DB::table('student__sections')->where('student_id',$var['student_id'])->where('section_id',$var['section_id'])->first();
 
         if(!$student){
@@ -81,9 +81,8 @@ class AbsenceController extends Controller
 
         $section_id = $var['section_id'];
         $students_ids = $var['students_ids'];
-        
-        $students = DB::table('student__sections')->where('section_id', $section_id)->whereIn('student_id', $students_ids)->get();
 
+        $students = DB::table('student__sections')->where('section_id', $section_id)->whereIn('student_id', $students_ids)->get();
         if($students->isEmpty())
         {
             return response()->json(
@@ -91,8 +90,15 @@ class AbsenceController extends Controller
                 404
             );
         }
-
         $today = Carbon::now()->format('Y-m-d');
+
+        // $students_today = DB::table('absences')->where('section_id', $section_id)->whereIn('student_id', $students_ids)->where('absence_data', $today)->get();
+        // if($students_today->isNotEmpty())
+        // {
+
+        // }
+
+
 
         $course_hours = DB::table('sections')->join('courses', 'sections.course_id', '=', 'courses.course_id')->
                 where('section_id',$var['section_id'])->select('course_hours')->first()->course_hours;
@@ -110,7 +116,7 @@ class AbsenceController extends Controller
             } catch (\Throwable $th) {
                 continue;
             }
-            $number_of_absence = Absence::where('student_id', $student->student_id)->count();
+            $number_of_absence = Absence::where('student_id', $student->student_id)->where('section_id', $section_id)->count();
             $absence_percentage = $this->calculatePercentages($course_hours, $number_of_absence);
 
             DB::table('student__sections')->where('student_id', $student->student_id)->where('section_id', $student->section_id)->
@@ -128,7 +134,7 @@ class AbsenceController extends Controller
      */
     public function show($student_id)
     {
-        
+
         $result = DB::select(DB::raw("SELECT * FROM absences,`sections` where sections.section_id = absences.section_id and student_id = $student_id "));
         return $result;
     }
@@ -158,7 +164,7 @@ class AbsenceController extends Controller
             'section_id'=>'required',
             'absence_date'=>'required|date'
       ]);
-      
+
         $absence = DB::table('absences')->where('student_id', $var['student_id'])->where('section_id',$var['section_id'])->where('absence_date',$var['absence_date']);
         if($absence->get()->isEmpty())
         {
@@ -189,7 +195,7 @@ class AbsenceController extends Controller
 
         $section_id = $var['section_id'];
         $students_ids = $var['students_ids'];
-        
+
         $students = DB::table('student__sections')->where('section_id', $section_id)->whereIn('student_id', $students_ids)->get();
 
         if($students->isEmpty())
@@ -244,7 +250,7 @@ class AbsenceController extends Controller
         {
             if($all_absence_students->isNotEmpty())
             {
-                foreach ($all_absence_students as $absence_student) 
+                foreach ($all_absence_students as $absence_student)
                 {
                     if($student->student_id == $absence_student->student_id)
                     {
@@ -280,11 +286,11 @@ class AbsenceController extends Controller
         $number_of_weeks = 10;
         if ($course_hours == 4 || $course_hours == 3)
         {
-            $number_of_class_in_week = 3; 
+            $number_of_class_in_week = 3;
             return (($number_of_absence / ($number_of_class_in_week * $number_of_weeks))) * 100;
 
         }elseif ($course_hours == 2) {
-            $number_of_class_in_week = 1; 
+            $number_of_class_in_week = 1;
             return (($number_of_absence / ($number_of_class_in_week * $number_of_weeks))) * 100;
         }else {
             // $number_of_class_in_week = 0;
