@@ -20,30 +20,35 @@ class AbsenceSeeder extends Seeder
     {
         $faker = Faker::create();
         $startDate = Carbon::now()->subYears(1);
-        $endDate = Carbon::now()->addMonths(5);
+        $endDate = Carbon::now()->addMonths(1);
 
         $randomDate = $faker->dateTimeBetween($startDate, $endDate);
         $formattedDate = Carbon::parse($randomDate)->format('Y-m-d');
 
-        $absences = [];
+        // $absences = [];
         $students = DB::table('students')->get();
         $sections = DB::table('sections')->get();
 
         foreach (range(1,50) as $absence) {
-            
-            $student = $students->random();
-            $section = $sections->random();
+            try {
+                $student = $students->random();
+                $section = $sections->random();
 
-            $absence = [
-                'student_id' => $student->student_id,
-                'section_id' => $section->section_id,
-                'absence_date' => $formattedDate, 
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
-            $absences[] = $absence; 
+                $absence = [
+                    'student_id' => $student->student_id,
+                    'section_id' => $section->section_id,
+                    'absence_date' => $formattedDate,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+                DB::table('absences')->insert($absence);
+                // $absences[] = $absence;
+            } catch (\Throwable $th) {
+                continue;
+            }
+
         }
 
-        DB::table('absences')->insert($absences);
+
     }
 }

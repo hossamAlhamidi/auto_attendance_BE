@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder; 
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 use Illuminate\Support\Str;
@@ -17,24 +17,30 @@ class StudentSeeder extends Seeder
      */
     public function run()
     {
-        $students = [];
+        // $students = [];
         $faker = Faker::create();
 
-        foreach (range(1,10) as $student) {
-            $password = Str::random(10);
-            $student = [
-                'student_id' => '44'. random_int(1,9) . '10' . random_int(1000,9999),
-                'student_name' => $faker->firstName() . ' ' . $faker->lastName(),
-                'email' => $faker->email(),
-                'phone_number' => $faker->phoneNumber(),
-                'password' => $password,
-                'remember_token' => $password, 
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
-            $students[] = $student; 
+        foreach (range(1,15) as $student) {
+            $id = '4' . random_int(3,4) . random_int(1,9) . '100' . random_int(100,999);
+            try {
+                $student = [
+                    'student_id' => $id,
+                    'student_name' => $faker->firstName() . ' ' . $faker->lastName(),
+                    'email' => $id . "@student.ksu.edu.sa",
+                    'phone_number' => '05' . random_int(10000000,99999999),
+                    'mac_address' => $faker->macAddress,
+                    'password' => bcrypt(123),
+                    'remember_token' => bcrypt(123),
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+                DB::table('students')->insert($student);
+                // $students[] = $student;
+            } catch (\Throwable $th) {
+                continue;
+            }
         }
 
-        DB::table('students')->insert($students);
+
     }
 }
